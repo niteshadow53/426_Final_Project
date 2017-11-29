@@ -1,0 +1,16 @@
+Users
+---------
+userID: INT, primary, autoinc
+passwd: CHAR(64), stored as shad256 hash
+
+Brackets
+---------
+BracketID
+user
+picks
+
+Teams
+---------
+TeamID: INT, primary, autoinc
+name: VARCHAR (100), name of team
+img: VARCHAR(100), location of team logo in DocRoot
