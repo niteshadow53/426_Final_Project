@@ -1,15 +1,16 @@
-Users
+users
 ---------
-userID: INT, primary, autoinc
-passwd: CHAR(64), stored as shad256 hash
+user_id: INT, primary, autoinc
+username: VARCHAR(25), unique
+passwd_hash: CHAR(64), stored as shad256 hash
 
-Brackets
+brackets
 ---------
-BracketID
+Bracket_id
 user
 picks
 
-Teams
+teams
 ---------
 TeamID: INT, primary, autoinc
 name: VARCHAR (100), name of team
