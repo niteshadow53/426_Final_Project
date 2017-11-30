@@ -1,16 +1,35 @@
-users
+Users: stores user info. Attributes in parentheses are optional so far
 ---------
-user_id: INT, primary, autoinc
-username: VARCHAR(25), unique
-passwd_hash: CHAR(64), stored as shad256 hash
+userID: INT, primary, autoinc
+username: VARCHAR(16), username for user
+passwd: CHAR(64), stored as shad256 hash
+(favTeam: INT, foreign key on Teams.TeamId, user's favorite team)
+(themeID: INT, foreign key on Themes.ThemeId, represents custom user theme)
 
-brackets
+Picks: stores info on each pick
+--------
+PickId: INT, primary, autoinc
+game: INT, foreign key on Games.GameId, game for the pick 
+winner: INT, foreign key on Teams.TeamId, team user chose to win that round
+bracket: INT, foreign key on Brackets.BracketId, bracket for which pick applies
+
+Games: stores info about each game--can be used to check brackets
+--------
+GameId: INT, primary, autoinc
+round: INT, round game occurs in
+region: VARCHAR(8), region of the game
+team1: INT, foreign key on Teams.TeamId, first team playing in game
+team2: INT, foreign key on Teams.TeamId, second team playing in game
+winner: INT, foreign key on Teams.TeamId, winner of the game
+
+
+Brackets: organizes each user bracket
 ---------
-Bracket_id
-user
-picks
+BracketID, INT, primary, autoinc
+user, INT, foreign key on userID
 
-teams
+
+Teams: stores info about each team
 ---------
 TeamID: INT, primary, autoinc
 name: VARCHAR (100), name of team
