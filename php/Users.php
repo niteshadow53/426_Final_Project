@@ -18,10 +18,15 @@ function addUser($username, $hash, $salt){
         return $response;
     }
 
+    // $qry = "INSERT INTO Users (username, passwd, salt) VALUES ";
+    // $qry .= "(\"".$username."\", \"".$hash."\", \"".$salt."\")";
     $qry = "INSERT INTO Users (username, passwd, salt) VALUES ";
-    $qry .= "(\"".$username."\", \"".$hash."\", \"".$salt."\")";
+    $qry .= "(?, ?, ?)";
+    $stmt = $mysqli->prepare($qry);
+    $stmt->bind_param("sss", $username, $hash, $salt);
+
     // echo "\n".$qry;
-    if (!$mysqli->query($qry)){
+    if (!$stmt->execute()){
         $response["error"] = $mysqli->error;
         // echo json_encode($response);
         return $response;
@@ -34,7 +39,7 @@ function addUser($username, $hash, $salt){
 }
 
 function checkIfUserExists($username){
-    $qry = 
+    // $qry =
 }
 
 
