@@ -1,5 +1,4 @@
-
-function registerNewBracketUser(){
+function loginBracketUser(){
     // get the username and password from the text fields
     var username_text = $("#register .username").val();
     var passwd_text = $("#register .password").val();
@@ -12,22 +11,18 @@ function registerNewBracketUser(){
 
     var request = $.ajax({
         type: "POST",
-        url: "http://localhost:8888/php/register.php", // TODO update when hosted
+        url: "http://localhost:8888/php/login.php", // TODO update when hosted
         data: data,
         success: function(response){
             response = JSON.parse(response);
             console.log("php response:");
             console.log(response);
             if(response.error == ""){
-                console.log("User successfully registered");
+                console.log("User successfully logged in");
             }
             else{
-                console.log("User did not successfully register. Reason:");
+                console.log("User did not successfully login. Reason:");
                 console.log(response.error);
-                if(response.error.startsWith("Duplicate")){
-                    console.log("Duplicate Entry handler");
-                    // TODO display a "username already taken" message
-                }
             }
         },
         error: function(xhr, status, error){
@@ -39,8 +34,4 @@ function registerNewBracketUser(){
         }
     });
 
-};
-
-function checkIfUsernameAvailable(){
-    
 }
