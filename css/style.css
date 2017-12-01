@@ -42,17 +42,23 @@ html, body{
     transform: translateY(-50%);
 }
 
-#controls .input, input[type='text']{
+.input input, button{
     display: block;
-    margin: 0 auto;
     font-size: 4em;
-    width: 50%;
-    margin-top: 0.5em;
+    width: 100%;
     opacity: 0.9;
     border: none;
     color: white;
     padding-left: 0.125em;
     text-align: center;
+}
+
+#controls .input{
+margin-top: 0.5em;
+}
+
+#controls .input:first-child{
+    margin-top: 0;
 }
 
 .blue{
@@ -67,8 +73,27 @@ html, body{
     opacity: 0.75;
     cursor: pointer;
     padding-left: 0.125em;
+    width: 100%;
 }
 
 #login, #register{
     display: none;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#options{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.error-message{
+    color: red;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.error{
+    border: 0.06em solid red !important;
 }

@@ -17,19 +17,22 @@
         </video>
         <div id="controls">
             <div id="options">
-                <div><button id="loginchoice" class="input green">Login</button></div>
-                <div><button id="registerchoice" class="input registerchoice blue">Register</button></div>
+                <div class="input"><button id="loginchoice" class="green">Login</button></div>
+                <div class="input"><button id="registerchoice" class="registerchoice blue">Register</button></div>
             </div>
             <div id="login">
-                <div><input type="text" class="input username blue" placeholder="Username"></div>
-                <div><input type="password" class="input password blue" placeholder="Password"></div>
-                <div><button class="input submit login green">Login</button></div>
+                <div class="input"><input type="text" class="username blue" placeholder="Username"></div>
+                <div class="input"><input type="password" class="password blue" placeholder="Password"></div>
+                <div class="input"><button class="submit login green">Login</button></div>
             </div>
             <div id="register">
-                <div><input type="text" class="input new-username blue" placeholder="Username"></div>
-                <div><input type="password" class="input new-password blue" placeholder="Password"></div>
-                <div><input type="password" class="input confirm-password blue" placeholder="Confirm Password"></div>            
-                <div><button class="input submit register green">Register</button></div>            
+                <div id="username-errors" hidden="true"></div>
+                <div class="input"><input type="text" id="new-username" class="new-username blue" placeholder="Username"></div>
+                <div id="password-errors" hidden="true"></div>
+                <div class="input"><input type="password" id="new-password" class="input new-password blue" placeholder="Password"></div>
+                <div id="confirm-password-errors" hidden="true"></div>
+                <div class="input"><input type="password" id="new-confirm-password" class="new-confirm-password blue" placeholder="Confirm Password"></div>            
+                <div class="input"><button class="submit register green">Register</button></div>            
             </div>
         </div>
     </body>
