@@ -2,7 +2,7 @@ Users: stores user info. Attributes in parentheses are optional so far
 ---------
 userID: INT, primary, autoinc
 username: VARCHAR(16), username for user
-passwd: CHAR(64), stored as shad256 hash
+passwd: CHAR(64), stored as sha256 hash
 salt: VARCHAR(32), salt for the hashed password
 (favTeam: INT, foreign key on Teams.TeamId, user's favorite team)
 (themeID: INT, foreign key on Themes.ThemeId, represents custom user theme)
