@@ -3,7 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <title>NCAA Bracket Web App</title>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+        <script src="js/index-ui.js"></script>
         <script src="js/register.js"></script>
         <script src="js/login.js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -14,11 +15,25 @@
             <source src="bg-video.webm" type="video/webm">
             <source src="bg-video.mp4" type="video/mp4">
         </video>
-        <div id="register">
-            <div><input type="text" class="input username" placeholder="Username"></div>
-            <div><input type="password" class="input password" placeholder="Password"></div>
-            <div><button class="input submit">Login</button></div>
+        <div id="controls">
+            <div id="options">
+                <div class="input"><button id="loginchoice" class="green">Login</button></div>
+                <div class="input"><button id="registerchoice" class="registerchoice blue">Register</button></div>
+            </div>
+            <div id="login">
+                <div class="input"><input type="text" class="username blue" placeholder="Username"></div>
+                <div class="input"><input type="password" class="password blue" placeholder="Password"></div>
+                <div class="input"><button class="submit login green">Login</button></div>
+            </div>
+            <div id="register">
+                <div id="username-errors" hidden="true"></div>
+                <div class="input"><input type="text" id="new-username" class="new-username blue" placeholder="Username"></div>
+                <div id="password-errors" hidden="true"></div>
+                <div class="input"><input type="password" id="new-password" class="input new-password blue" placeholder="Password"></div>
+                <div id="confirm-password-errors" hidden="true"></div>
+                <div class="input"><input type="password" id="new-confirm-password" class="new-confirm-password blue" placeholder="Confirm Password"></div>            
+                <div class="input"><button class="submit register green">Register</button></div>            
+            </div>
         </div>
     </body>
-
 </html>
