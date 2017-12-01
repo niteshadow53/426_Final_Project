@@ -1,5 +1,5 @@
 <?php
-require "Users.php";
+require_once "orm/Users.php";
 
 function register(){
     // Given a username and password, create an entry for that user

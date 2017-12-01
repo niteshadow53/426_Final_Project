@@ -1,4 +1,5 @@
-<?php require "utils.php";
+<?php
+require_once "utils.php";
 
 // ORM mapping for Users table
 
@@ -39,7 +40,36 @@ function addUser($username, $hash, $salt){
 }
 
 function checkIfUserExists($username){
-    // $qry =
+    $response = array("error" => "", "data" => array());
+
+    // Connect to mysqli database
+    $mysqli = getMysqliObject();
+
+    // Check for and return connection errors
+    if ($mysqli->connect_errno){
+        $response["error"] = "Failed to connect";
+        $response["error"] .= $mysqli->error;
+        return $response;
+    }
+
+    // prepare statement
+    $qry = "SELECT username FROM Users WHERE username = ?";
+    $stmt = $mysqli->prepare($qry);
+    $stmt->bind_param("s", $username);
+
+    // execute statement
+    if (!$stmt->execute()){
+        $response["error"] = $mysqli->error;
+        // echo json_encode($response);
+        return $response;
+    }
+
+    // Return response
+    $result = $stmt->get_result();
+    while($row = $result->fetch_assoc()){
+        $response["data"]["username"] = $row['username'];
+    }
+    return $response;
 }
 
 
