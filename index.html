@@ -3,7 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <title>NCAA Bracket Web App</title>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+        <script src="js/index-ui.js"></script>
         <script src="js/register.js"></script>
         <script src="js/login.js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -14,11 +15,22 @@
             <source src="bg-video.webm" type="video/webm">
             <source src="bg-video.mp4" type="video/mp4">
         </video>
-        <div id="register">
-            <div><input type="text" class="input username" placeholder="Username"></div>
-            <div><input type="password" class="input password" placeholder="Password"></div>
-            <div><button class="input submit">Login</button></div>
+        <div id="controls">
+            <div id="options">
+                <div><button id="loginchoice" class="input green">Login</button></div>
+                <div><button id="registerchoice" class="input registerchoice blue">Register</button></div>
+            </div>
+            <div id="login">
+                <div><input type="text" class="input username blue" placeholder="Username"></div>
+                <div><input type="password" class="input password blue" placeholder="Password"></div>
+                <div><button class="input submit login green">Login</button></div>
+            </div>
+            <div id="register">
+                <div><input type="text" class="input new-username blue" placeholder="Username"></div>
+                <div><input type="password" class="input new-password blue" placeholder="Password"></div>
+                <div><input type="password" class="input confirm-password blue" placeholder="Confirm Password"></div>            
+                <div><button class="input submit register green">Register</button></div>            
+            </div>
         </div>
     </body>
-
 </html>

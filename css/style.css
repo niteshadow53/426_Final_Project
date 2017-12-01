@@ -36,28 +36,39 @@ html, body{
     opacity: 0.5;
 }
 
-#register{
+#controls{
     position: relative;
     top: 50%;
     transform: translateY(-50%);
 }
 
-#register .input, input[type='text']{
+#controls .input, input[type='text']{
     display: block;
     margin: 0 auto;
     font-size: 4em;
-    width: 33%;
+    width: 50%;
     margin-top: 0.5em;
     opacity: 0.9;
-    background-color: #13294b;
     border: none;
     color: white;
     padding-left: 0.125em;
     text-align: center;
 }
 
-#register button{
+.blue{
+    background-color: #13294b;    
+}
+
+.green{
+    background-color: #19453b;    
+}
+
+#controls button{
     opacity: 0.75;
     cursor: pointer;
     padding-left: 0.125em;
+}
+
+#login, #register{
+    display: none;
 }

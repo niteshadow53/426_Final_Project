@@ -1,0 +1,10 @@
+$(document).ready(function(){
+    $("#registerchoice").click(function(){
+        $("#options").slideUp();
+        $("#register").slideDown();
+    })
+    $("#loginchoice").click(function(){
+        $("#options").slideUp();
+        $("#login").slideDown();
+    })
+})
