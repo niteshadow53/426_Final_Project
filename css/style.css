@@ -1,7 +1,7 @@
 html, body{
     height: 100%;
     margin: 0;
-    overflow: hidden;
+    font-family: "Optima", "Candara", "Century Gothic", sans-serif;
 }
 #bg-vid{
     position: fixed;
@@ -73,7 +73,9 @@ margin-top: 0.5em;
     opacity: 0.75;
     cursor: pointer;
     padding-left: 0.125em;
-    width: 100%;
+    width: 101.28%;          /* For some reason, button is narrower than text input */
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 #login, #register{
@@ -96,4 +98,40 @@ margin-top: 0.5em;
 
 .error{
     border: 0.06em solid red !important;
+}
+
+td{
+    width: auto;
+    height: auto;
+}
+
+.filled{
+    background-color: black;
+}
+
+.right-border{
+    border-right: 1px solid black;
+}
+
+table.game{
+    margin: 10px;
+    padding: 0;
+    background-color:#ededed;
+    border-spacing: 0;
+    width: 10em;
+    display: inline-table;
+
+}
+p.team-info{
+    margin-top: 0.125em;
+    margin-bottom: 0.125em;
+}
+
+tr.teamOne{
+    background-color: #b7b7b7;
+    margin: 0;
+}
+
+td.score{
+    text-align: right;
 }
