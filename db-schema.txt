@@ -21,8 +21,16 @@ round: INT, round game occurs in
 region: VARCHAR(8), region of the game
 team1: INT, foreign key on Teams.TeamId, first team playing in game
 team2: INT, foreign key on Teams.TeamId, second team playing in game
+team1score: INT, score of team1
+team2score: INT, score of team2
+status: INT, foreign key on GameStatus.id, status of game (scheduled, in progress, finished)
 winner: INT, foreign key on Teams.TeamId, winner of the game
 
+
+GameStatus: stores info about potential statuses for each game
+------
+statusId: INT, primary, autoinc
+status: VARCHAR (16), text description of game status
 
 Brackets: organizes each user bracket
 ---------
@@ -33,5 +41,8 @@ user, INT, foreign key on userID
 Teams: stores info about each team
 ---------
 TeamID: INT, primary, autoinc
-name: VARCHAR (100), name of team
+name: VARCHAR (100), name of team (ex North Carolina)
+nickname: VARCHAR (100), nickname of team (ex Tar Heels)
 img: VARCHAR(100), location of team logo in DocRoot
+bgcolor: VARCHAR(8), hex value of the official color of team for bracket
+textcolor: VARCHAR(8), hex value of text color of team for bracket
