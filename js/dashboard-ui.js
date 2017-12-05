@@ -52,55 +52,71 @@ $(document).ready(function(){
         new Team('Georgia', 'Bulldogs', null, '#000000', '#BA0C2F'),
         new Team('Kentucky', 'Wildcats', null,'#0033A0','#ffffff'),
         new Team('Missouri', 'Tigers', null, '#F1B82D', '#000000'),
-        new Team('South Carolina', 'Gamecocks', null, '##73000a', '#000000'),
+        new Team('South Carolina', 'Gamecocks', null, '#73000a', '#000000'),
         new Team('Tennessee', 'Volunteers', null, '#FF8200', '#ffffff'),
         new Team('Vanderbilt', 'Commodores', null, '#D8AB4C', '#ffffff'),
         new Team('Alabama', 'Crimson Tide', null, '#990000', '#eeeeee '),
         new Team('Arkansas', 'Razorbacks', null, '#9D2235', '#ffffff'),
         new Team('Auburn', 'Tigers', null, '#03244d', '#dd550c'),
-        new Team('Louisiana State', 'Tigers', null, '#461D7C', '#FDD023'),
-        new Team('Mississippi', 'Rebels', null, '', ''),
-        new Team('Mississippi State', 'Bulldogs', null, '', ''),
-        new Team('Texas A&M', 'Aggies', null, '', '')
+        new Team('LSU', 'Tigers', null, '#461D7C', '#FDD023'),
+        new Team('Mississippi', 'Rebels', null, '#C8102E', '#13294B'),
+        new Team('Mississippi State', 'Bulldogs', null, '#660000', '#CCCCCC'),
+        new Team('Texas A&M', 'Aggies', null, '#500000', '#ffffff'),
+        new Team('Indiana', 'Hoosiers', null, '#990000', '#EDEBEB'),
+        new Team('Maryland', 'Terrapins', null, '#FF0000', '#000000'),
+        new Team('Michigan', 'Wolverines', null, '#00274c', '#ffcb05')
+        //new Team('Michigan State', 'Spartans', null, '#18453b', '#97A2A2')
     ];
-
     var firstRound = [];
     var secondRound = [];
     var thirdRound = [];
 
-    firstRound = generateFirstRound(teams);
+    /*firstRound = generateFirstRound(teams);
     secondRound = generateNextRound(firstRound, 1);
     thirdRound = generateNextRound(secondRound, 2);
     lastRound = generateNextRound(thirdRound, 3);
+    actualLastRound = generateNextRound(lastRound, 4);*/
+    generateRegion("00", teams.slice(0, 16));
+    generateRegion("01", teams.slice(16, 32));
 
-    function generateFirstRound(teams){
+    function generateRegion(coords, teams){
+        id = "#region-"+coords;
+        var next = generateFirstRound(id, teams, coords);
+        for(var i = 1; i < 4; i++){
+            next = generateNextRound(next, id, i, coords);
+        }
+        //next = generateNextRound(next, id, 1, coords);
+        //next = generateNextRound(next, id, 2, coords);
+    }
+
+    function generateFirstRound(id, teams, region){
         var firstRound = [];
         for (i = 0; i < teams.length; i+= 2){
-            game = new Game(teams[i], teams[i+1], "0" + i, 0);
+            game = new Game(teams[i], teams[i+1], region + "0" + i, 0);
             score1 = Math.floor(Math.random() * (30) + 60);
             score2 = Math.floor(Math.random() * (30) + 60);
             game.updateScore(score1, score2);
-            addGame(game);
+            addGame(game, id, region);
             firstRound.push(game);
         }
         return firstRound;
     }
     
-    function generateNextRound(games, round){
+    function generateNextRound(games, id, round, region){
         var nextRound = [];
         for (i = 0; i < games.length; i+=2){
-            game = new Game(games[i].getWinner(), games[i+1].getWinner(), ""+ round + i, round);
+            game = new Game(games[i].getWinner(), games[i+1].getWinner(), ""+ region + round + i, round);
             score1 = Math.floor(Math.random() * (30) + 60);
             score2 = Math.floor(Math.random() * (30) + 60);
             game.updateScore(score1, score2);
-            addGame(game, games[i], games[i+1]);
+            addGame(game, id, region, games[i], games[i+1]);
             nextRound.push(game);
         }
         return nextRound;
     }
 
-    function addGame(game, prevOne = null, prevTwo = null){
-        $("#bracket-area").append(generateGame(game) + "<br>");
+    function addGame(game, id, region, prevOne = null, prevTwo = null){
+        $(id).append(generateGame(game) + "<br>");
         //console.log($("#"+game.id + " tr.teamOne").css('background-color'));
         $("#"+game.id + " tr.teamOne").css({
             'background-color': game.team1.bgcolor,
@@ -113,8 +129,12 @@ $(document).ready(function(){
         if (prevOne != null && prevTwo != null){
                 prevOnej = $("#"+prevOne.id);
                 prevTwoj = $("#"+prevTwo.id);
-                vPos = Math.floor((prevTwoj.offset().top - prevOnej.offset().top) / 2) + Math.floor(prevOnej.offset().top) - 5;
-                hPos = 170*game.round;
+                vPos = Math.floor((prevTwoj.offset().top - prevOnej.offset().top) / 2) + Math.floor(prevOnej.offset().top) - 5;                
+                if (region == "00" || region == "10"){
+                    hPos = 170*game.round;    
+                } else {
+                    hPos = prevTwoj.offset().left - 180;                        
+                }
                 $("#"+game.id).css({
                     position: 'absolute',
                     top: vPos,
