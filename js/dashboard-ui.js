@@ -1,11 +1,18 @@
 
 $(document).ready(function(){
-    function Team(name, nickname = null, img = null, bgcolor = null, textcolor = null){
+    GameStates = {
+        NOT_STARTED: 0,
+        IN_PROGRESS: 1,
+        FINISHED: 2
+    }
+    
+    function Team(name, nickname = null, img = null, bgcolor = null, textcolor = null, rank = 0){
         this.name = name;
         this.nickname = nickname;
         this.img = img;
         this.bgcolor = bgcolor;
         this.textcolor = textcolor;
+        this.rank = rank;
     }
     
     function Game(team1, team2, id, round, region = null){
@@ -14,6 +21,7 @@ $(document).ready(function(){
         this.id = id;
         this.round = round;
         this.region = region;
+        this.status = GameStates.NOT_STARTED;
         this.score = {
             team1Score: 0,
             team2Score: 0
@@ -85,8 +93,18 @@ $(document).ready(function(){
         for(var i = 1; i < 4; i++){
             next = generateNextRound(next, id, i, coords);
         }
-        //next = generateNextRound(next, id, 1, coords);
-        //next = generateNextRound(next, id, 2, coords);
+    }
+
+    function generateNullGame(gameId){
+        var region = gameId.substring(0, 2);
+        var round = gameId.substring(2,3);
+        console.log(round);
+        console.log(region);
+        return new Game(generateNullTeam(), generateNullTeam(), round, region)
+    }
+
+    function generateNullTeam(){
+        return new Team("");
     }
 
     function generateFirstRound(id, teams, region){
@@ -96,6 +114,7 @@ $(document).ready(function(){
             score1 = Math.floor(Math.random() * (30) + 60);
             score2 = Math.floor(Math.random() * (30) + 60);
             game.updateScore(score1, score2);
+            game.status = GameStates.FINISHED;
             addGame(game, id, region);
             firstRound.push(game);
         }
@@ -104,12 +123,54 @@ $(document).ready(function(){
     
     function generateNextRound(games, id, round, region){
         var nextRound = [];
+        var numGames = 2**(3-round);
         for (i = 0; i < games.length; i+=2){
-            game = new Game(games[i].getWinner(), games[i+1].getWinner(), ""+ region + round + i, round);
-            score1 = Math.floor(Math.random() * (30) + 60);
-            score2 = Math.floor(Math.random() * (30) + 60);
-            game.updateScore(score1, score2);
-            addGame(game, id, region, games[i], games[i+1]);
+            var gameId = ""+region+round+i;
+            if(games[i].status == GameStates.FINISHED && games[i+1].status == GameStates.FINISHED){
+                var game = new Game(games[i].getWinner(), games[i+1].getWinner(), gameId, round);
+                outcome = Math.floor(Math.random() * 3);
+                switch (outcome){
+                    case 0:
+                        game.status = GameStates.NOT_STARTED;
+                        break;
+                    case 1:
+                        score1 = Math.floor(Math.random() * (30) + 60);
+                        score2 = Math.floor(Math.random() * (30) + 60);
+                        game.updateScore(score1, score2);
+                        game.status = GameStates.IN_PROGRESS;
+                        break;
+                    case 2:
+                    default:
+                        score1 = Math.floor(Math.random() * (30) + 60);
+                        score2 = Math.floor(Math.random() * (30) + 60);
+                        game.updateScore(score1, score2);
+                        game.status = GameStates.FINISHED
+                        break;  
+                }
+                addGame(game, id, region, games[i], games[i+1]);
+                nextRound.push(game);
+            } else if (games[i].status == GameStates.FINISHED && games[i+1].status != GameStates.FINISHED){
+                var game = new Game(games[i].getWinner(), generateNullTeam(), gameId, round);
+                game.status = GameStates.NOT_STARTED;                
+                addGame(game, id, region, games[i], games[i+1]);
+                nextRound.push(game);    
+            } else if (i < games.length && (games[i].status != GameStates.FINISHED && games[i+1].status == GameStates.FINISHED)){
+                var game = new Game(generateNullTeam(), games[i+1].getWinner(), gameId, round);
+                game.status = GameStates.NOT_STARTED;
+                addGame(game, id, region, games[i], games[i+1]);
+                nextRound.push(game);    
+            } else {
+                var game = new Game(generateNullTeam(), generateNullTeam(), gameId, round);
+                game.status = GameStates.NOT_STARTED;
+                addGame(game, id, region, games[i], games[i+1]);
+                nextRound.push(game);    
+            }
+        }
+        for(i = nextRound.length; i < nextRound.length; i++){
+            var gameId = ""+region+round+i;
+            var game = generateNullGame(gameId);
+            game.statuS = GameStates.NOT_STARTED;
+            addGame(game, id, region, gam)
             nextRound.push(game);
         }
         return nextRound;
@@ -117,6 +178,9 @@ $(document).ready(function(){
 
     function addGame(game, id, region, prevOne = null, prevTwo = null){
         $(id).append(generateGame(game) + "<br>");
+        var width = $(window).width() / 8 - 20;
+        console.log(width);
+        $("#"+game.id).width(width);
         //console.log($("#"+game.id + " tr.teamOne").css('background-color'));
         $("#"+game.id + " tr.teamOne").css({
             'background-color': game.team1.bgcolor,
@@ -131,9 +195,9 @@ $(document).ready(function(){
                 prevTwoj = $("#"+prevTwo.id);
                 vPos = Math.floor((prevTwoj.offset().top - prevOnej.offset().top) / 2) + Math.floor(prevOnej.offset().top) - 5;                
                 if (region == "00" || region == "10"){
-                    hPos = 170*game.round;    
+                    hPos = (width + 20)*game.round;    
                 } else {
-                    hPos = prevTwoj.offset().left - 180;                        
+                    hPos = prevTwoj.offset().left - width - 20;                        
                 }
                 $("#"+game.id).css({
                     position: 'absolute',
