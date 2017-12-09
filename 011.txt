@@ -1,0 +1,4 @@
+Kansas,Michigan St
+Iowa State,Purdue
+Rhode Island,Oregon
+Michigan,Louisville
