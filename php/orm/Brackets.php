@@ -188,6 +188,212 @@ function getUsernameAssociatedWithBracketID($bracket_id){
     return $response;
 }
 
+function saveBracketDataFromPOST($data, $bracket_name, $username){
+    $response = array();
+
+    $mysqli = getMysqliObject();
+
+    // Check for and return connection errors
+    if ($mysqli->connect_errno){
+        $response["error"] = "Failed to connect";
+        $response["error"] .= $mysqli->error;
+        return $response;
+    }
+
+    // get user's ID
+    $user_id_response = getIDOfUser($username);
+    if(array_key_exists($user_id_response, "error")){
+        return $user_id_response;
+    }
+    $user_id = $user_id_response['user_id'];
+
+    // get bracket's ID
+    $bracket_id_response = getIDOfBracket($bracket_name, $user_id);
+    if(array_key_exists($bracket_id_response, "error")){
+        return $bracket_id_response;
+    }
+    $bracket_id = $bracket_id_response['bracket_id'];
+
+    // Clear out any entries that are already there
+    $remove_result = removeEntriesForBracket($bracket_id);
+    if(array_key_exists($remove_result, "error")){
+        return $remove_result;
+    }
+
+    foreach ($data as $property => $value){
+        // get winner's ID
+        $team_id_response = getIDOfTeam($value);
+        if(array_key_exists($team_id_response, "error")){
+            return $team_id_response;
+        }
+        $team_id = $team_id_response['team_id'];
+
+
+
+        $region = substr($property, 0, 2);
+        $round = substr($property, 2, 1);
+        $game_num = substr($property, 3);
+
+        // print "property: ".$property;
+        // print "\n";
+        // print "value: ".$value;
+        // print "\n";
+        // print "region: ".$region;
+        // print "\n";
+        // print "round: ".$round;
+        // print "\n";
+        // print "game_num: ".$game_num;
+        // print "\n";
+        print "team_id: ".$team_id;
+        print "\n";
+        print "user_id: ".$user_id;
+        print "\n";
+        print "bracket_id: ".$bracket_id;
+        print "\n";
+
+        $qry = "INSERT INTO picks (game, round, region, winner, bracket) VALUES ";
+        $qry .= "(?, ?, ?, ?, ?)";
+        $stmt = $mysqli->prepare($qry);
+        $stmt->bind_param("iisii", $game_num, $round, $region, $team_id, $bracket_id);
+
+        // execute statement
+        if (!$stmt->execute()){
+            $response["error"] = $mysqli->error;
+            $response["error"] .= "statement failed to execute";
+            // echo json_encode($response);
+            return $response;
+        }
+    }
+    return array("success"=>"1");
+}
+
+function removeEntriesForBracket($bracket_id){
+    $response = array();
+    $mysqli = getMysqliObject();
+
+    // Check for and return connection errors
+    if ($mysqli->connect_errno){
+        $response["error"] = "Failed to connect";
+        $response["error"] .= $mysqli->error;
+        return $response;
+    }
+
+    $qry = "DELETE FROM picks WHERE bracket=?";
+    $stmt = $mysqli->prepare($qry);
+    $stmt->bind_param("i", $bracket_id);
+
+    // execute statement
+    if (!$stmt->execute()){
+        $response["error"] = $mysqli->error;
+        $response["error"] .= "statement failed to execute";
+        // echo json_encode($response);
+        return $response;
+    }
+
+    return array("success"=>"1");
+}
+
+function getIDOfTeam($teamname){
+    $response = array();
+    $mysqli = getMysqliObject();
+
+    // Check for and return connection errors
+    if ($mysqli->connect_errno){
+        $response["error"] = "Failed to connect";
+        $response["error"] .= $mysqli->error;
+        return $response;
+    }
+
+    $qry = "SELECT team_id FROM teams WHERE name=?";
+    $stmt = $mysqli->prepare($qry);
+    $stmt->bind_param("s", $teamname);
+
+    // execute statement
+    if (!$stmt->execute()){
+        $response["error"] = $mysqli->error;
+        $response["error"] .= "statement failed to execute";
+        // echo json_encode($response);
+        return $response;
+    }
+
+    // Parse response
+    $result = $stmt->get_result();
+    while($row = $result->fetch_assoc()){
+        // $currentPick = array("game"=>$row['game'], "winner"=>$row['winner']);
+        // $response[] = $currentPick;
+        $response['team_id'] = $row['team_id'];
+    }
+
+    return $response;
+}
+
+function getIDOfBracket($bracket_name, $user_id){
+    $response = array();
+    $mysqli = getMysqliObject();
+
+    // Check for and return connection errors
+    if ($mysqli->connect_errno){
+        $response["error"] = "Failed to connect";
+        $response["error"] .= $mysqli->error;
+        return $response;
+    }
+
+    $qry = "SELECT bracket_id FROM brackets WHERE name=? AND user=?";
+    $stmt = $mysqli->prepare($qry);
+    $stmt->bind_param("si", $bracket_name, $user_id);
+
+    // execute statement
+    if (!$stmt->execute()){
+        $response["error"] = $mysqli->error;
+        $response["error"] .= "statement failed to execute";
+        // echo json_encode($response);
+        return $response;
+    }
+
+    // Parse response
+    $result = $stmt->get_result();
+    while($row = $result->fetch_assoc()){
+        // $currentPick = array("game"=>$row['game'], "winner"=>$row['winner']);
+        // $response[] = $currentPick;
+        $response['bracket_id'] = $row['bracket_id'];
+    }
+
+    return $response;
+}
+
+function getIDOfUser($username){
+    $response = array();
+    $mysqli = getMysqliObject();
+
+    // Check for and return connection errors
+    if ($mysqli->connect_errno){
+        $response["error"] = "Failed to connect";
+        $response["error"] .= $mysqli->error;
+        return $response;
+    }
+
+    $qry = "SELECT user_id FROM users WHERE username=?";
+    $stmt = $mysqli->prepare($qry);
+    $stmt->bind_param("s", $username);
+
+    // execute statement
+    if (!$stmt->execute()){
+        $response["error"] = $mysqli->error;
+        $response["error"] .= "statement failed to execute";
+        // echo json_encode($response);
+        return $response;
+    }
+
+    // Parse response
+    $result = $stmt->get_result();
+    while($row = $result->fetch_assoc()){
+        // $currentPick = array("game"=>$row['game'], "winner"=>$row['winner']);
+        // $response[] = $currentPick;
+        $response['user_id'] = $row['user_id'];
+    }
+
+    return $response;
+}
 
 
 // TESTING ====
@@ -205,4 +411,12 @@ function getUsernameAssociatedWithBracketID($bracket_id){
 // print json_encode(getPicksForBracketID(1))
 
 // print json_encode(getBracketData(1));
+
+// print_r (getIDOfTeam("North Carolina"));
+
+// print_r (getIDOfBracket("bestbracket", 0));
+
+// print_r(getIDOfUser("user128"));
+
+// print_r(removeEntriesForBracket(1));
 ?>

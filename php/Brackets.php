@@ -10,6 +10,7 @@ $pathinfo = explode("/", $pathinfo);
 
 // print_r ($pathinfo);
 // print_r $_GET;
+// print_r ($_POST['bracket']);
 
 // Check if GET or POST
 if ($_SERVER['REQUEST_METHOD'] === 'GET'){
@@ -25,8 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'){
 }
 else{ // POST
     // implement post logic here
+
+    $json = json_decode($_POST['bracket']);
+    saveBracketDataFromPOST($json, $_POST['name'], $_POST['user']);
+
     echo "This is a post method";
     echo "Not finished yet";
+
+
 
 }
 ?>

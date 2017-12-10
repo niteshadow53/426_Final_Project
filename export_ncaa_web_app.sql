@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:8889
--- Generation Time: Dec 10, 2017 at 09:26 PM
+-- Generation Time: Dec 10, 2017 at 10:40 PM
 -- Server version: 5.5.42
 -- PHP Version: 5.6.7
 
@@ -57,7 +57,7 @@ CREATE TABLE `picks` (
   `bracket` int(11) DEFAULT NULL,
   `round` int(11) DEFAULT NULL,
   `region` char(2) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `picks`
@@ -71,7 +71,8 @@ INSERT INTO `picks` (`pick_id`, `game`, `winner`, `bracket`, `round`, `region`) 
 (5, 0, 7, 1, 1, '00'),
 (6, 0, 1, 1, 0, 'ff'),
 (7, 2, 3, 1, 0, 'ff'),
-(8, 0, 7, 1, 1, 'ff');
+(8, 0, 7, 1, 1, 'ff'),
+(9, 0, 25, 1, 2, '00');
 
 -- --------------------------------------------------------
 
@@ -83,7 +84,7 @@ CREATE TABLE `teams` (
   `team_id` int(11) unsigned NOT NULL,
   `name` varchar(100) DEFAULT NULL,
   `nickname` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `teams`
@@ -94,7 +95,35 @@ INSERT INTO `teams` (`team_id`, `name`, `nickname`) VALUES
 (3, 'Xavier', NULL),
 (5, 'Northwestern', NULL),
 (7, 'Arkansas', NULL),
-(9, 'Duke', NULL);
+(9, 'Duke', NULL),
+(10, 'Gonzaga', NULL),
+(11, 'Notre Dame', NULL),
+(12, 'Maryland', NULL),
+(13, 'West Virginia', NULL),
+(14, 'St Marys', NULL),
+(15, 'Butler', NULL),
+(16, 'Kansas State', NULL),
+(17, 'Dayton', NULL),
+(18, 'FGCU', NULL),
+(19, 'Arizona', NULL),
+(20, 'Kentucky', NULL),
+(21, 'Villanova', NULL),
+(22, 'UNCW', NULL),
+(23, 'Florida', NULL),
+(24, 'USC', NULL),
+(25, 'New Mexico St', NULL),
+(26, 'South Carolina', NULL),
+(27, 'UC Davis', NULL),
+(28, 'Miami', NULL),
+(29, 'Iowa State', NULL),
+(30, 'Purdue', NULL),
+(31, 'Creighton', NULL),
+(32, 'Oregon', NULL),
+(33, 'Michigan', NULL),
+(34, 'Louisville', NULL),
+(35, 'Minnesota', NULL),
+(36, 'UCLA', NULL),
+(37, 'Wisconsin', NULL);
 
 -- --------------------------------------------------------
 
@@ -152,7 +181,8 @@ ALTER TABLE `picks`
 -- Indexes for table `teams`
 --
 ALTER TABLE `teams`
-  ADD PRIMARY KEY (`team_id`);
+  ADD PRIMARY KEY (`team_id`),
+  ADD UNIQUE KEY `name` (`name`);
 
 --
 -- Indexes for table `users`
@@ -179,12 +209,12 @@ ALTER TABLE `games`
 -- AUTO_INCREMENT for table `picks`
 --
 ALTER TABLE `picks`
-  MODIFY `pick_id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `pick_id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `teams`
 --
 ALTER TABLE `teams`
-  MODIFY `team_id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+  MODIFY `team_id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=38;
 --
 -- AUTO_INCREMENT for table `users`
 --
