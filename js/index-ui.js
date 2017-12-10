@@ -2,11 +2,20 @@ $(document).ready(function(){
     $("#registerchoice").click(function(){
         $("#options").slideUp();
         $("#register").slideDown();
+        $("#back").slideDown();
     })
     $("#loginchoice").click(function(){
         $("#options").slideUp();
         $("#login").slideDown();
+        $("#back").slideDown();        
     })
+
+    $("#back-button").click(function(){
+        $("#login").slideUp();
+        $("#register").slideUp();
+        $("#options").slideDown();
+        $("#back").hide();
+    });
 })
 
 // Displays an error inside a given div
