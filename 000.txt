@@ -1,0 +1,8 @@
+Villanova,Mt St Marys
+Wisconsin,Virginia Tech
+Virginia,UNCW
+Florida,East Tennessee St
+SMU,USC
+Baylor,New Mexico St
+South Carolina,Marquette
+Duke,Troy

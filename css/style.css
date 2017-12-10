@@ -1,7 +1,7 @@
 html, body{
     height: 100%;
     margin: 0;
-    overflow: hidden;
+    font-family: "Optima", "Candara", "Century Gothic", sans-serif;
 }
 #bg-vid{
     position: fixed;
@@ -73,7 +73,9 @@ margin-top: 0.5em;
     opacity: 0.75;
     cursor: pointer;
     padding-left: 0.125em;
-    width: 100%;
+    width: 101.28%;          /* For some reason, button is narrower than text input */
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 #login, #register{
@@ -91,9 +93,121 @@ margin-top: 0.5em;
 
 .error-message{
     color: red;
-    font-family: Helvetica, Arial, sans-serif;
 }
 
 .error{
     border: 0.06em solid red !important;
+}
+
+td{
+    width: auto;
+    height: auto;
+}
+
+.filled{
+    background-color: black;
+}
+
+.right-border{
+    border-right: 1px solid black;
+}
+
+#bracket-container{
+    width: 100%;
+}
+
+#bracket{
+    padding: 1em;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+table.game{
+    margin: 5px;
+    padding: 0;
+    background-color:#ededed;
+    border-spacing: 0;
+    width: 10em;
+    display: inline-table;
+
+}
+p.team-info{
+    margin-top: 0.125em;
+    margin-bottom: 0.125em;
+}
+
+tr.teamOne{
+    background-color: #b7b7b7;
+    margin: 0;
+}
+
+td.score.right{
+    text-align: right;
+}
+
+td.score.left{
+    text-align: left;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.region.left{
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.region.right{
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.right{
+    text-align: right;
+}
+
+.navbar{
+    height: 3em;
+    background-color: #13294b;
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.nav-item a{
+    color: white;   
+    text-decoration: none;
+}
+
+.nav-item{
+    margin-right: 1em;
+}
+
+.nav-item:first-child{
+    margin-right: auto;
+    margin-left: 1em;
+}
+
+.round{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.round-label{
+    text-align: center;
+}
+
+.final-four{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
 }
