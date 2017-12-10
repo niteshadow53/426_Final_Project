@@ -205,3 +205,9 @@ td.score.left{
 .round-label{
     text-align: center;
 }
+
+.final-four{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
