@@ -53,11 +53,15 @@ function generateRegion(coords, fname, pickable){
             },
         dataType: 'json',
         success: function(data){
+            if(coords == 'ff'){
+                console.log('hi');
+            }
             rounds = data['rounds'];
             id = "#region-"+coords;
             for(var i = 0; i < rounds.length; i++){
                 if(coords == 'ff'){
-                    generateRound(id, rounds[i]['games'], coords, '', pickable);                        
+                    generateRound(id, rounds[i]['games'], coords, i, pickable);
+                    $("#ff02").before($("#ff10"));
                 } else {
                     generateRound(id, rounds[i]['games'], coords, i, pickable);
                 }
@@ -109,7 +113,11 @@ function generateNullTeam(){
 function generateRound(id, games, region, round, pickable){
     var firstRound = [];
     var roundId = ""+region+round;
-    var roundDiv = "<div id='"+roundId+"' class='round'></div>";
+    if (region == "ff"){
+        var roundDiv = "<span id='"+roundId+"' class='round'></div>";    
+    } else {
+        var roundDiv = "<div id='"+roundId+"' class='round'></div>";
+    }
     if (region == "00" || region == "10" || region == "ff0" || region == "ff1" || region == "ff"){            
         $(id).append(roundDiv);
     } else {
@@ -185,7 +193,11 @@ function generateNextRound(games, id, round, region){
 }
 
 function addGame(game, id, region, pickable, prevOne = null, prevTwo = null){
-    $(id).append(generateGame(game, region, pickable) + "<br>");
+    if (region == "ff"){
+        $(id).append(generateGame(game, region, pickable));        
+    } else {
+        $(id).append(generateGame(game, region, pickable) + "<br>");
+    }
     var width = Math.min($("#bracket").width() / 8 - 20, 160);
     $("#"+game.id).width(width);
     $("#"+game.id + " tr.teamOne").css({
