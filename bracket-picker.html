@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+        <script src="js/bracket.js"></script>
+        <script src="js/pick-bracket.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+    <body>
+        <div class="navbar">
+            <span class="nav-item"><a href="#">Home</a></span>
+            <span class="nav-item"><a href="#">Official Bracket</a></span>
+            <span class="nav-item"><a href="#">My Groups</a></span>
+            <span class="nav-item"><a href="#">My Bracket</a></span>
+            <span class="nav-item"><a href="#">My Profile</a></span>
+        </div>
+        <div id="bracket">
+            <h1>Pick Your Bracket</h1>
+            <input type="text" placeholder='Bracket Name'>
+            <div class='row'>
+                <div class='region left' id="region-00"></div>
+                <div class='region right'  id="region-01"></div>        
+            </div>
+            <div class='row final-four'>
+                <div class='region left' id='region-ff0'></div>
+                <div class='region center' id='region-ff'></div>
+                <div class='region right' id='region-ff1'></div>
+            </div>
+            <div class='row'>
+                <div class='region left'  id="region-10"></div>
+                <div class='region right'  id="region-11"></div>
+            </div>
+            <button id="submit-picks">Submit Your Picks</button>
+        </div>
+    </body>
+</html>

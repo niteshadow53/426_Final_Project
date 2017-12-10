@@ -1,0 +1,8 @@
+Gonzaga,South Dakota State
+Northwestern,Vanderbilt
+Notre Dame,Princeton
+West Virginia,Bucknell
+Maryland,Xavier
+Florida State,FGCU
+St Marys,VCU
+Arizona,North Dakota
