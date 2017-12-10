@@ -12,7 +12,7 @@ $(document).ready(function(){
         'bracket': {}
     };
 
-    var leftToPick = 64;
+    var leftToPick = 63;
 
     for (key in bData){
         var limit = (key == '00' || key == '01' || key == '10' || key == '11') ? 4 : 2;
