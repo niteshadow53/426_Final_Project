@@ -244,12 +244,12 @@ function saveBracketDataFromPOST($data, $bracket_name, $username){
         // print "\n";
         // print "game_num: ".$game_num;
         // print "\n";
-        print "team_id: ".$team_id;
-        print "\n";
-        print "user_id: ".$user_id;
-        print "\n";
-        print "bracket_id: ".$bracket_id;
-        print "\n";
+        // print "team_id: ".$team_id;
+        // print "\n";
+        // print "user_id: ".$user_id;
+        // print "\n";
+        // print "bracket_id: ".$bracket_id;
+        // print "\n";
 
         $qry = "INSERT INTO picks (game, round, region, winner, bracket) VALUES ";
         $qry .= "(?, ?, ?, ?, ?)";

@@ -26,9 +26,11 @@ function login(){
     $computed_hash = hash('sha256', $password.$salt);
 
     // Check if the hashes match
-    if(!$computed_hash == $stored_hash){
+    if(!($computed_hash == $stored_hash)){
         $result["error"] = "Password incorrect";
+        $result["status"] = "Password incorrect. Please try again.";
         echo json_encode($result);
+        return;
     }
 
     // set session variable "auth" to true and "user" to username
