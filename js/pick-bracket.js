@@ -15,12 +15,11 @@ $(document).ready(function(){
     var leftToPick = 64;
 
     for (key in bData){
-        picks['bracket'][key] = {};
         var limit = (key == '00' || key == '01' || key == '10' || key == '11') ? 4 : 2;
         for(var i = 0; i < limit; i++){
-            picks['bracket'][key][i.toString()] = {};
             for (var j = 0; j < 2**(limit - i); j+=2){
-                picks['bracket'][key][i.toString()][j.toString()] = null;
+                bkey = key + i.toString() + j.toString();
+                picks['bracket'][bkey] = null;
             }
         }
     }
@@ -31,7 +30,7 @@ $(document).ready(function(){
         var nextGame = calculateNextGame(gameid);
         winner = $(this).find('.team')[0].textContent;
         if (nextGame == null){
-                picks['bracket']['ff']['1']['0'] = winner;
+                picks['bracket']['ff10'] = winner;
         } else {
             var nextGameId = nextGame[0];
             var isTeamOne = nextGame[1];    
@@ -44,7 +43,8 @@ $(document).ready(function(){
                 removeEntries(currentWinner, winner, gameid, isThisTeamOne);    
                 $($("#"+nextGameId).find('.teamTwo')).find('.team')[0].textContent = winner;            
             }
-            picks['bracket'][gameid.substring(0,2)][gameid.charAt(2)][gameid.substring(3)] = winner;
+            key = gameid.substring(0,2) + gameid.charAt(2) + gameid.substring(3);
+            picks['bracket'][key] = winner;
         }
         if(leftToPick > 0){
             leftToPick--;
@@ -89,7 +89,8 @@ $(document).ready(function(){
     function removeEntries(team, newTeam, startingPoint, isTeamOne){
         pageTeam = team;
         while(pageTeam != newTeam && pageTeam != ""){
-            picks['bracket'][startingPoint.substring(0,2)][startingPoint.charAt(2)][startingPoint.substring(3)] = null;
+            var key = startingPoint.substring(0,2) + startingPoint.charAt(2) + startingPoint.substring(3);
+            picks['bracket'][key] = null;
             if(leftToPick < 63){
                 leftToPick++;                
             }
@@ -108,8 +109,8 @@ $(document).ready(function(){
             } else {
                 $($("#"+startingPoint).find('.teamTwo')).find('.team')[0].textContent = '';            
             }
-            temp = picks['bracket'][startingPoint.substring(0,2)][startingPoint.charAt(2)][startingPoint.substring(3)];
-            if(pageTeam != picks['bracket'][startingPoint.substring(0,2)][startingPoint.charAt(2)][startingPoint.substring(3)]){
+            key = startingPoint.substring(0,2) + startingPoint.charAt(2) + startingPoint.substring(3);
+            if(pageTeam != picks['bracket'][key]){
                 return;
             }
         }
