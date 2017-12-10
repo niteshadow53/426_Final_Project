@@ -4,8 +4,6 @@ $(document).ready(function(){
         '01': 'p01.json',
         '10': 'p10.json',
         '11': 'p11.json',
-        'ff0': 'pff0.json',
-        'ff1': 'pff1.json',
         'ff': 'pff.json'
     };
     var picks = {
@@ -14,9 +12,11 @@ $(document).ready(function(){
         'bracket': {}
     };
 
+    var leftToPick = 64;
+
     for (key in bData){
         picks['bracket'][key] = {};
-        var limit = (key == '00' || key == '01' || key == '10' || key == '11') ? 4 : 1;
+        var limit = (key == '00' || key == '01' || key == '10' || key == '11') ? 4 : 2;
         for(var i = 0; i < limit; i++){
             picks['bracket'][key][i.toString()] = {};
             for (var j = 0; j < 2**(limit - i); j+=2){
@@ -26,32 +26,43 @@ $(document).ready(function(){
     }
     generateBracket(bData, true);
     $('.region').on('click', '.pickable', function(){
+        var isThisTeamOne = $(this).hasClass('teamOne');
         var gameid = $($($(this).parent()).parent()[0]).attr('id');
         var nextGame = calculateNextGame(gameid);
-        var nextGameId = nextGame[0];
-        var isTeamOne = nextGame[1];
         winner = $(this).find('.team')[0].textContent;
-        console.log("" + gameid.substring(0,2) + " " + gameid.charAt(2) + " " + gameid.substring(3))
-        picks['bracket'][gameid.substring(0,2)][gameid.charAt(2)][gameid.substring(3)] = winner;
-        if(isTeamOne){
-            currentWinner = $($("#"+nextGameId).find('.teamOne')).find('.team')[0].textContent;
-            removeEntries(currentWinner, nextGameId, isTeamOne);    
-            $($("#"+nextGameId).find('.teamOne')).find('.team')[0].textContent = winner;
+        if (nextGame == null){
+                picks['bracket']['ff']['1']['0'] = winner;
         } else {
-            currentWinner = $($("#"+nextGameId).find('.teamTwo')).find('.team')[0].textContent;
-            removeEntries(currentWinner, nextGameId, isTeamOne);    
-            $($("#"+nextGameId).find('.teamTwo')).find('.team')[0].textContent = winner;            
+            var nextGameId = nextGame[0];
+            var isTeamOne = nextGame[1];    
+            if(isTeamOne){
+                currentWinner = $($("#"+nextGameId).find('.teamOne')).find('.team')[0].textContent;
+                removeEntries(currentWinner, winner, gameid, isThisTeamOne);
+                $($("#"+nextGameId).find('.teamOne')).find('.team')[0].textContent = winner;
+            } else {
+                currentWinner = $($("#"+nextGameId).find('.teamTwo')).find('.team')[0].textContent;
+                removeEntries(currentWinner, winner, gameid, isThisTeamOne);    
+                $($("#"+nextGameId).find('.teamTwo')).find('.team')[0].textContent = winner;            
+            }
+            picks['bracket'][gameid.substring(0,2)][gameid.charAt(2)][gameid.substring(3)] = winner;
         }
-        console.log(picks);
+        if(leftToPick > 0){
+            leftToPick--;
+        }
+        console.log(leftToPick);
     });
 
     $("#submit-picks").click(function(){
-        data = JSON.stringify(picks);
-        console.log(data);
+        console.log(leftToPick);            
+        if(leftToPick > 0){
+            alert("Bracket incomplete");
+        }
+            data = JSON.stringify(picks);
+            console.log(data);
     });
 
     function calculateNextGame(gameId){
-        if(gameId == 'ff'){
+        if(gameId == 'ff10'){
             return null;
         }
         var gameNum = parseInt(gameId.substring(3));
@@ -63,42 +74,43 @@ $(document).ready(function(){
         nextGameRound = parseInt(nextGamePrefix.charAt(2)) + 1;
         if(nextGameRound == 4){
             fNum = parseInt(gameId.charAt(0));
-            nextGamePrefix = 'ff' + nextGamePrefix.charAt(1);
+            nextGameNum =  (parseInt(nextGamePrefix.charAt(1)) * 2).toString();
+            nextGamePrefix = 'ff0';
             isTeamOne = (fNum == 0) ? true : false;
         } else if (nextGameRegion == 'ff'){
-            gameNum = parseInt(gameId.charAt(2));
-            isTeamOne = (gameNum == 0) ? true : false;
-            nextGameId = 'ff';
+            nextGameId = 'ff10';
         } else {
             nextGamePrefix = nextGamePrefix.substring(0,2) + (parseInt(nextGamePrefix.charAt(2)) + 1).toString();            
         }
-        var nextGameId = (nextGameId == 'ff') ? nextGameId : nextGamePrefix + nextGameNum;
+        var nextGameId = (nextGameId == 'ff10') ? nextGameId : nextGamePrefix + nextGameNum;
         return [nextGameId, isTeamOne];
     }
 
-    function removeEntries(team, startingPoint, isTeamOne){
-        if(isTeamOne){
-            pageTeam =  $($("#"+startingPoint).find('.teamOne')).find('.team')[0].textContent;            
-        } else {
-            pageTeam =  $($("#"+startingPoint).find('.teamTwo')).find('.team')[0].textContent;            
-        }
-        while(pageTeam == team && pageTeam != ""){
+    function removeEntries(team, newTeam, startingPoint, isTeamOne){
+        pageTeam = team;
+        while(pageTeam != newTeam && pageTeam != ""){
             picks['bracket'][startingPoint.substring(0,2)][startingPoint.charAt(2)][startingPoint.substring(3)] = null;
+            if(leftToPick < 63){
+                leftToPick++;                
+            }
+            nextGame = calculateNextGame(startingPoint);
+            startingPoint = nextGame[0];
+            console.log(startingPoint);
+            isTeamOne = nextGame[1];
+            oldPageTeam = pageTeam;
+            if(isTeamOne){
+                pageTeam = $($("#"+startingPoint).find('.teamOne')).find('.team')[0].textContent                
+            } else {
+                pageTeam = $($("#"+startingPoint).find('.teamTwo')).find('.team')[0].textContent   
+            }
             if(isTeamOne){
                 $($("#"+startingPoint).find('.teamOne')).find('.team')[0].textContent = '';
             } else {
                 $($("#"+startingPoint).find('.teamTwo')).find('.team')[0].textContent = '';            
             }
-            nextGame = calculateNextGame(startingPoint);
-            if(nextGame == null){ return }
-            startingPoint = nextGame[0];
-            console.log(startingPoint);
-            isTeamOne = nextGame[1];
-            if(isTeamOne){
-                pageTeam = $($("#"+startingPoint).find('.teamOne')).find('.team')[0].textContent                
-            } else {
-                pageTeam = $($("#"+startingPoint).find('.teamTwo')).find('.team')[0].textContent
-                
+            temp = picks['bracket'][startingPoint.substring(0,2)][startingPoint.charAt(2)][startingPoint.substring(3)];
+            if(pageTeam != picks['bracket'][startingPoint.substring(0,2)][startingPoint.charAt(2)][startingPoint.substring(3)]){
+                return;
             }
         }
         
