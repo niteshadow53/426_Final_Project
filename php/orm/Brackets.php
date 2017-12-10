@@ -204,5 +204,5 @@ function getUsernameAssociatedWithBracketID($bracket_id){
 
 // print json_encode(getPicksForBracketID(1))
 
-print json_encode(getBracketData(1));
+// print json_encode(getBracketData(1));
 ?>
