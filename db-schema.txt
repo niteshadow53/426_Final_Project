@@ -1,22 +1,28 @@
-Users: stores user info. Attributes in parentheses are optional so far
+users: stores user info. Attributes in parentheses are optional so far
 ---------
-userID: INT, primary, autoinc
+user_id: INT, primary, autoinc
 username: VARCHAR(16), username for user
 passwd: CHAR(64), stored as sha256 hash
 salt: VARCHAR(32), salt for the hashed password
 (favTeam: INT, foreign key on Teams.TeamId, user's favorite team)
 (themeID: INT, foreign key on Themes.ThemeId, represents custom user theme)
+*Table Indexes*
+username: unique
 
-Picks: stores info on each pick
+picks: stores info on each pick
 --------
-PickId: INT, primary, autoinc
+pick_id: INT, primary, autoinc
 game: INT, foreign key on Games.GameId, game for the pick
 winner: INT, foreign key on Teams.TeamId, team user chose to win that round
 bracket: INT, foreign key on Brackets.BracketId, bracket for which pick applies
+round: INT, lists the round
+region: CHAR(2) lists the two letter region code
+*Table Indexes*
+game+round+region+bracket: Unique
 
-Games: stores info about each game--can be used to check brackets
+games: stores info about each game--can be used to check brackets
 --------
-GameId: INT, primary, autoinc
+game_id: INT, primary, autoinc
 round: INT, round game occurs in
 region: VARCHAR(8), region of the game
 team1: INT, foreign key on Teams.TeamId, first team playing in game
@@ -27,20 +33,22 @@ status: INT, foreign key on GameStatus.id, status of game (scheduled, in progres
 winner: INT, foreign key on Teams.TeamId, winner of the game
 
 
-GameStatus: stores info about potential statuses for each game
+gameStatus: stores info about potential statuses for each game
 ------
 statusId: INT, primary, autoinc
 status: VARCHAR (16), text description of game status
 
-Brackets: organizes each user bracket
+brackets: organizes each user bracket
 ---------
-BracketID, INT, primary, autoinc
-user, INT, foreign key on userID
+bracket_id: INT, primary, autoinc
+name: VARCHAR(100), name of bracket
+user: INT, foreign key on userID
+*Table Indexes*
+name+user: Unique
 
-
-Teams: stores info about each team
+teams: stores info about each team
 ---------
-TeamID: INT, primary, autoinc
+team_id: INT, primary, autoinc
 name: VARCHAR (100), name of team (ex North Carolina)
 nickname: VARCHAR (100), nickname of team (ex Tar Heels)
 img: VARCHAR(100), location of team logo in DocRoot
