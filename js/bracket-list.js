@@ -1,13 +1,29 @@
 $(document).ready(function(){
+    var user = '';
+    
+    $.ajax({
+        async: false,
+        type: 'GET',
+        url: 'http://localhost:8888/426_final_project/php/login.php/getAuthenticatedUser',
+        success: function(data){
+            jdata = JSON.parse(data);
+            user = jdata['username'];
+        },
+        error: function(a,b){
+            console.log(a);
+        }
+    });
+    
     $.ajax({
         type: 'POST',
         url: 'http://localhost:8888/426_final_project/php/Brackets.php/getBracketsForUser',
         data: {
-            'username': 'user11'
+            'username': user
         },
         success: function(data){
+            console.log(data);
             brackets = JSON.parse(data);
-            //console.log(brackets);
+            console.log(brackets);
             generateTable(brackets);
         }
     });

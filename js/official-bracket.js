@@ -2,6 +2,22 @@ $(window).on('load', function(){
 
     var vars = window.location.search.split('?');
     bid = vars[1].split("=")[1];
+    if (bid == null){
+        bid = 22;
+    }
+    var user = '';
+    
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8888/426_final_project/php/login.php/getAuthenticatedUser',
+        success: function(data){
+            jdata = JSON.parse(data);
+            user = jdata['username'];
+        },
+        error: function(a,b){
+            console.log(a);
+        }
+    });
 
     var bData = {
         '00': 'p00.json',
@@ -250,7 +266,7 @@ $(window).on('load', function(){
             data: {
                 'bracket': JSON.stringify(picks['bracket']),
                 'name': bracket_name,
-                'user': 'user11'
+                'usenamer': 'user11'
             },
             success: function(data){
                 console.log(data);

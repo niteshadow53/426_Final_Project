@@ -1,5 +1,23 @@
 $(document).ready(function(){
     var bracketName;
+
+    var user = '';
+    
+    $.ajax({
+        async: false,
+        type: 'GET',
+        url: 'http://localhost:8888/426_final_project/php/login.php/getAuthenticatedUser',
+        success: function(data){
+            jdata = JSON.parse(data);
+            user = jdata['username'];
+        },
+        error: function(a,b){
+            console.log(a);
+        }
+    });
+
+    console.log(user);
+
     $("#create-bracket").click(function(){
         bracketName = $("#bracket-name").val();
         $.ajax({
@@ -7,7 +25,7 @@ $(document).ready(function(){
             url: 'http://localhost:8888/426_final_project/php/Brackets.php/createBracket',
             data: {
                 'bracket_name': bracketName,
-                'username': 'user11'
+                'username': user
             },
             success: function(data){
                 console.log(data);
@@ -123,7 +141,7 @@ $(document).ready(function(){
                 data: {
                     'bracket': JSON.stringify(picks['bracket']),
                     'name': bracketName,
-                    'user': 'user11'
+                    'username': user
                 },
                 success: function(data){
                     console.log(data);
