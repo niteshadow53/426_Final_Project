@@ -26,7 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'){
 }
 else{ // POST
     // implement post logic here
-
+    if (array_key_exists("1", $pathinfo) && $pathinfo[1] == "getBracketsForUser"){
+        $username = $_POST['username'];
+        // $bracket_name = $_POST['bracket_name'];
+        echo json_encode(getBracketsForUser($username));
+        return;
+    }
     if (array_key_exists("1", $pathinfo) && $pathinfo[1] == "checkIfBracketExists"){
         $username = $_POST['username'];
         $bracket_name = $_POST['bracket_name'];
