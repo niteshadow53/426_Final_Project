@@ -202,28 +202,28 @@ function saveBracketDataFromPOST($data, $bracket_name, $username){
 
     // get user's ID
     $user_id_response = getIDOfUser($username);
-    if(array_key_exists($user_id_response, "error")){
+    if(array_key_exists("error", $user_id_response)){
         return $user_id_response;
     }
     $user_id = $user_id_response['user_id'];
 
     // get bracket's ID
     $bracket_id_response = getIDOfBracket($bracket_name, $user_id);
-    if(array_key_exists($bracket_id_response, "error")){
+    if(array_key_exists("error", $bracket_id_response)){
         return $bracket_id_response;
     }
     $bracket_id = $bracket_id_response['bracket_id'];
 
     // Clear out any entries that are already there
     $remove_result = removeEntriesForBracket($bracket_id);
-    if(array_key_exists($remove_result, "error")){
+    if(array_key_exists("error", $remove_result)){
         return $remove_result;
     }
 
     foreach ($data as $property => $value){
         // get winner's ID
         $team_id_response = getIDOfTeam($value);
-        if(array_key_exists($team_id_response, "error")){
+        if(array_key_exists("error", $team_id_response)){
             return $team_id_response;
         }
         $team_id = $team_id_response['team_id'];
@@ -395,6 +395,150 @@ function getIDOfUser($username){
     return $response;
 }
 
+function createBracket($username, $bracket_name){
+    $response = array();
+    $mysqli = getMysqliObject();
+
+    // Check for and return connection errors
+    if ($mysqli->connect_errno){
+        $response["error"] = "Failed to connect";
+        $response["error"] .= $mysqli->error;
+        return $response;
+    }
+
+    // get user's ID
+    $user_id_response = getIDOfUser($username);
+    if(array_key_exists("error", $user_id_response)){
+        return $user_id_response;
+    }
+    $user_id = $user_id_response['user_id'];
+
+    // get bracket's ID (check to see if it already exists)
+    $bracket_id_response = getIDOfBracket($bracket_name, $user_id);
+    if(array_key_exists("error", $bracket_id_response)){
+        return $bracket_id_response;
+    }
+    $bracket_id = $bracket_id_response['bracket_id'];
+
+    if(!($bracket_id == null)){
+        return array("error"=>"Bracket already exists");
+    }
+
+
+    $qry = "INSERT INTO brackets (name, user) VALUES (?,?)";
+    $stmt = $mysqli->prepare($qry);
+    $stmt->bind_param("si", $bracket_name, $user_id);
+
+
+
+    // execute statement
+    if (!$stmt->execute()){
+        $response["error"] = $mysqli->error;
+        $response["error"] .= "statement failed to execute";
+        // echo json_encode($response);
+        return $response;
+    }
+
+    // return bracket_id at the end
+    $bracket_id_response = getIDOfBracket($bracket_name, $user_id);
+    if(array_key_exists("error", $bracket_id_response)){
+        return $bracket_id_response;
+    }
+    $bracket_id = $bracket_id_response['bracket_id'];
+
+
+    return array("status"=>"Bracket successfully added", "bracket_id"=>$bracket_id);
+}
+
+function checkIfBracketExists($username, $bracket_name){
+    // get user's ID
+    $user_id_response = getIDOfUser($username);
+    if(array_key_exists("error", $user_id_response)){
+        return $user_id_response;
+    }
+    $user_id = $user_id_response['user_id'];
+
+    // get bracket's ID (check to see if it already exists)
+    $bracket_id_response = getIDOfBracket($bracket_name, $user_id);
+    if(array_key_exists("error", $bracket_id_response)){
+        return $bracket_id_response;
+    }
+    $bracket_id = $bracket_id_response['bracket_id'];
+
+    // print "userid: ".$user_id."\n";
+    // print "bracket_id: ".$bracket_id;
+
+    if(!($bracket_id == null)){
+        return array("status"=>"Bracket already exists", "taken"=>1);
+    }
+
+    return array("status"=>"Bracket name is available", "taken"=>0);
+}
+
+function updateGames($input){
+    $response = array();
+    $mysqli = getMysqliObject();
+
+    // Check for and return connection errors
+    if ($mysqli->connect_errno){
+        $response["error"] = "Failed to connect";
+        $response["error"] .= $mysqli->error;
+        return $response;
+    }
+
+    // parse for team1 name
+    // TODO
+    $team1_name = "";
+
+    // parse for team2 name
+    // TODO
+    $team2_name = "";
+
+    // get team1 id
+    $team1_id_response = getIDOfTeam($team1_name);
+    if(array_key_exists("error", $team1_id_response)){
+        return $team1_id_response;
+    }
+    $team1_id = $team1_id_response['team_id'];
+    // get team2 id
+    $team2_id_response = getIDOfTeam($team2_name);
+    if(array_key_exists("error", $team2_id_response)){
+        return $team2_id_response;
+    }
+    $team2_id = $team2_id_response['team_id'];
+
+    // TODO Should I have the lower id always be team1?
+
+    // for each row in input...
+        $round = ""; // TODO
+        $region = ""; // TODO
+        $team1score = ""; // TODO
+        $team2score = ""; // TODO
+        $status = ""; // TODO
+        $winner = ""; // TODO (the actual string name)
+        $winner_id = 0;
+        if($winner == $team1_name){
+            $winner_id = $team1_id;
+        }
+        else{
+            $winner_id = $team2_id;
+        }
+
+        $qry = "INSERT INTO games (round, region, team1, team2, team1score, team2score, status, winner) ";
+        $qry .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $mysqli->prepare($qry);
+        $stmt->bind_param("isiiiiii", $round, $region, $team1_id, $team2_id, $team1_score, $team2_score, $status, $winner_id);
+
+        // execute statement
+        if (!$stmt->execute()){
+            $response["error"] = $mysqli->error;
+            $response["error"] .= "statement failed to execute";
+            // echo json_encode($response);
+            return $response;
+        }
+
+}
+
 
 // TESTING ====
 // print json_encode(getPicksForBracketIDRoundAndRegion(1, 0, "00"));
@@ -419,4 +563,9 @@ function getIDOfUser($username){
 // print_r(getIDOfUser("user128"));
 
 // print_r(removeEntriesForBracket(1));
+
+// createBracket($user11, "best bracket ever!");
+// createBracket($user11, "bestbracket");
+
+// print_r (checkIfBracketExists("user11", "bestbracket"));
 ?>
