@@ -1,4 +1,8 @@
 $(window).on('load', function(){
+
+    var vars = window.location.search.split('?');
+    bid = vars[1].split("=")[1];
+
     var bData = {
         '00': 'p00.json',
         '01': 'p01.json',
@@ -42,7 +46,7 @@ $(window).on('load', function(){
     
     }
 
-    console.log(realdata);
+    // console.log(realdata);
 
     for (key in bData){
         var limit = (key == 'ff')? 2 : 4;
@@ -55,12 +59,12 @@ $(window).on('load', function(){
         }
     }
     
-    console.log(realdata);
+    // console.log(realdata);
     
 
     $.ajax({
         type: "GET",
-        url: 'http://localhost:8888/426_final_project/php/Brackets.php?id=6',
+        url: 'http://localhost:8888/426_final_project/php/Brackets.php?id=' + bid,
         contentType: "text/plain",
         error: function(jqXHR, textStatus, errorThrown){
             //console.log(jqXHR);
@@ -104,7 +108,7 @@ $(window).on('load', function(){
                 //realdata[key] = {};
                 for (var i  = 0; i < limit; i++){
                     if(key == 'ff') {
-                        console.log('hi');
+                        //console.log('hi');
                     }
                     /*if(i == 0 && key != 'ff'){
                         realdata[key][i.toString()] = {};
@@ -173,7 +177,7 @@ $(window).on('load', function(){
                 }
             }
 
-            console.log(realdata);
+            //console.log(realdata);
             generateBracket(realdata, false);
         },
         complete: function(jqXHR, textStatus){

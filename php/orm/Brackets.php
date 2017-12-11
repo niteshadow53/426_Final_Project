@@ -223,14 +223,7 @@ function saveBracketDataFromPOST($data, $bracket_name, $username){
     foreach ($data as $property => $value){
         // get winner's ID
         $team_id_response = getIDOfTeam($value);
-<<<<<<< HEAD
-        //print_r($value);
-        //print_r($team_id_response);
-        error_log("ERROR: " . $output);
-        if(array_key_exists($team_id_response, "error")){
-=======
         if(array_key_exists("error", $team_id_response)){
->>>>>>> login
             return $team_id_response;
         }
         $team_id = $team_id_response['team_id'];

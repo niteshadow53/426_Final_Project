@@ -1,4 +1,22 @@
 $(document).ready(function(){
+    var bracketName;
+    $("#create-bracket").click(function(){
+        bracketName = $("#bracket-name").val();
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8888/426_final_project/php/Brackets.php/createBracket',
+            data: {
+                'bracket_name': bracketName,
+                'username': 'user11'
+            },
+            success: function(data){
+                console.log(data);
+                $("#create-bracket-name").slideUp();
+                $("#bracket").slideDown();
+            }
+        })
+    })
+    
     var bData = {
         '00': 'p00.json',
         '01': 'p01.json',
@@ -99,10 +117,10 @@ $(document).ready(function(){
             console.log(postdata);
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8888//426_final_project/php/Brackets.php',
+                url: 'http://localhost:8888/426_final_project/php/Brackets.php/',
                 data: {
                     'bracket': JSON.stringify(picks['bracket']),
-                    'name': picks['name'],
+                    'name': bracketName,
                     'user': 'user11'
                 },
                 success: function(data){
