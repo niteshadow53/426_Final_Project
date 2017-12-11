@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'){
         // implement logic here
         $username = getUsernameFromBracketID($_GET['id'])['username'];
         // Add an exception for the "official bracket" pick
-        if(($username != $_SESSION['username'] || $username == null) && $_GET['id'] != 0){
+        if(($username != $_SESSION['username'] || $username == null) && $_GET['id'] != 22){
             echo "Not authenticated!";
             return;
         }
