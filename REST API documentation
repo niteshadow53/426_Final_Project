@@ -9,12 +9,16 @@ result: {"error":"", status:""}
     where <error> is a directly printed error
     and <status> is a user friendly status message
 
-GET: localhost:8888/php/Brackets.php?user={username to check}
+GET: localhost:8888/php/login.php?user={username to check}
 purpose: To check if a username is taken
 result: If the username is taken (example results):
         {"username":"user11","status":"username is taken","taken":1}
     If not taken:
         {"status":"username is free","taken":0}
+
+GET: localhost:8888/php/login/getAuthenticatedUser
+purpose: To see what user you have authenticated as
+result: {"username":"username"}
 
 Register API ===========
 base url: localhost:8888/php/register.php
