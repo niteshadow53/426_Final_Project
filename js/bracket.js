@@ -42,31 +42,15 @@ function generateBracket(data, pickable){
     }
 }
 
-function generateRegion(coords, fname, pickable){
-    $.ajax({
-        url: fname,
-        beforeSend: function(xhr){
-            if (xhr.overrideMimeType)
-            {
-                xhr.overrideMimeType("application/json");
-            }
-            },
-        dataType: 'json',
-        success: function(data){
-            rounds = data['rounds'];
-            id = "#region-"+coords;
-            for(var i = 0; i < rounds.length; i++){
-                if(coords == 'ff'){
-                    generateRound(id, rounds[i]['games'], coords, '', pickable);                        
-                } else {
-                    generateRound(id, rounds[i]['games'], coords, i, pickable);
-                }
-            }
-        },
-        complete: function(){
-
+function generateRegion(coords, round, pickable){
+    id = "#region-"+coords;
+    for(var i = 0; i < rounds.length; i++){
+        if(coords == 'ff'){
+            generateRound(id, round, coords, '', pickable);                        
+        } else {
+            generateRound(id, round, coords, i, pickable);
         }
-    });
+    }
 }
 
 function generateGameDict(gameId, team1 = null, team2 = null){
