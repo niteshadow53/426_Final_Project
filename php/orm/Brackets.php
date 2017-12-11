@@ -38,6 +38,44 @@ function getPicksForBracketIDRoundAndRegion($bracket_id, $round, $region){
     return (object)$response;
 }
 
+// // Get bracket game results
+// function getGamesResultsForRoundAndRegion($round, $region){
+//     $response = array();
+//
+//     $mysqli = getMysqliObject();
+//
+//     // Check for and return connection errors
+//     if ($mysqli->connect_errno){
+//         $response["error"] = "Failed to connect";
+//         $response["error"] .= $mysqli->error;
+//         return $response;
+//     }
+//
+//     // form prepared statement
+//     $qry = "SELECT game, winner, round, teams.name FROM games, teams ";
+//     $qry .= "WHERE winner=team_id AND round=? AND region=?";
+//     $stmt = $mysqli->prepare($qry);
+//     $stmt->bind_param("iis", $bracket_id, $round, $region);
+//
+//     // execute statement
+//     if (!$stmt->execute()){
+//         $response["error"] = $mysqli->error;
+//         $response["error"] .= "statement failed to execute";
+//         // echo json_encode($response);
+//         return $response;
+//     }
+//
+//     // Parse response
+//     $result = $stmt->get_result();
+//     while($row = $result->fetch_assoc()){
+//         // $currentPick = array("game"=>$row['game'], "winner"=>$row['winner']);
+//         // $response[] = $currentPick;
+//         $response[$row['game']] = $row['name'];
+//         // we want... array($row['game']=>array($row['t1name'], ['t2name'], ['winner']))
+//     }
+//     return (object)$response;
+// }
+
 // Get bracket picks for a specific region in a bracket
 function getPicksForBracketIDRegion($bracket_id, $region){
     $response = array();
@@ -539,6 +577,50 @@ function updateGames($input){
 
 }
 
+function getBracketsForUser($username){
+    // return bracket names and ids
+    $response = array();
+    $mysqli = getMysqliObject();
+
+    // Check for and return connection errors
+    if ($mysqli->connect_errno){
+        $response["error"] = "Failed to connect";
+        $response["error"] .= $mysqli->error;
+        return $response;
+    }
+
+    // get user's ID
+    $user_id_response = getIDOfUser($username);
+    if(array_key_exists("error", $user_id_response)){
+        return $user_id_response;
+    }
+    $user_id = $user_id_response['user_id'];
+
+    $qry = "SELECT bracket_id, name, username FROM brackets, users ";
+    $qry .= "WHERE brackets.user=users.user_id AND username=?";
+    $stmt = $mysqli->prepare($qry);
+    $stmt->bind_param("s", $username);
+
+    // execute statement
+    if (!$stmt->execute()){
+        $response["error"] = $mysqli->error;
+        $response["error"] .= "statement failed to execute";
+        // echo json_encode($response);
+        return $response;
+    }
+
+    // Parse response
+    $result = $stmt->get_result();
+    while($row = $result->fetch_assoc()){
+        // $currentPick = array("game"=>$row['game'], "winner"=>$row['winner']);
+        // $response[] = $currentPick;
+        $response[$row['bracket_id']] = $row['name'];
+    }
+
+    return (object)$response;
+
+}
+
 
 // TESTING ====
 // print json_encode(getPicksForBracketIDRoundAndRegion(1, 0, "00"));
@@ -568,4 +650,6 @@ function updateGames($input){
 // createBracket($user11, "bestbracket");
 
 // print_r (checkIfBracketExists("user11", "bestbracket"));
+
+// print json_encode(getBracketsForUser("user11"));
 ?>
