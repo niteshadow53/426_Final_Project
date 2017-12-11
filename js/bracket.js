@@ -128,11 +128,13 @@ function generateRound(id, games, region, round, pickable){
 
     for (var key in games){
         if(games.hasOwnProperty(key)){
-            var team1 = games[key].team1;
-            var team2 = games[key].team2;
-            bracketGame = new Game(games[key]);
-            addGame(bracketGame, "#"+roundId, region, pickable);
-            firstRound.push(bracketGame);       
+            if(games[key] != null){
+                var team1 = games[key].team1;
+                var team2 = games[key].team2;
+                bracketGame = new Game(games[key]);
+                addGame(bracketGame, "#"+roundId, region, pickable);
+                firstRound.push(bracketGame);
+            }
         }
     }
 
@@ -206,14 +208,14 @@ function addGame(game, id, region, pickable, prevOne = null, prevTwo = null){
     }
     var width = Math.min($("#bracket").width() / 8 - 20, 160);
     $("#"+game.id).width(width);
-    $("#"+game.id + " tr.teamOne").css({
+    /*$("#"+game.id + " tr.teamOne").css({
         'background-color': game.team1.bgcolor,
         'color': game.team1.textcolor
     })
     $("#"+game.id + " tr.teamTwo").css({
         'background-color': game.team2.bgcolor,
         'color': game.team2.textcolor
-    })
+    })*/
 }
 
 function generateRoundLabel(round){

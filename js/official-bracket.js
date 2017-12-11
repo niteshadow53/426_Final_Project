@@ -27,7 +27,7 @@ $(window).on('load', function(){
                 console.log("Error: " + errorThrown);
             },
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 for (var i in data['rounds']){
                     data['rounds'][i] = data['rounds'][i]['games']
                 }
@@ -42,7 +42,22 @@ $(window).on('load', function(){
     
     }
 
+    console.log(realdata);
+
+    for (key in bData){
+        var limit = (key == 'ff')? 2 : 4;
+        for (var k2 in realdata[key]){
+            if(k2 != 0){
+                for(var k3 in realdata[key][k2]){
+                    realdata[key][k2][k3] = null;
+                }   
+            }
+        }
+    }
     
+    console.log(realdata);
+    
+
     $.ajax({
         type: "GET",
         url: 'http://localhost:8888/426_final_project/php/Brackets.php?id=6',
@@ -79,7 +94,6 @@ $(window).on('load', function(){
                     }
                 }
             }
-
 
             for (key in bracketData){
                 //console.log(key);
@@ -121,13 +135,13 @@ $(window).on('load', function(){
                                 'name': bracketData[key][i][j + 2]
                             });
                             id = "" + key + (i+1) + (j/2);
-                            console.log(id);
+                            //console.log(id);
                             game = new Game(generateGameDict(id,t1,t2));
                             if(key == 'ff' && i+1 > 1){
                                 realdata['ff'][(i+1)] = {};
                                 realdata['ff'][(i+1)][0] = {};
                             }
-                            realdata[id.substring(0,2)][parseInt(id.charAt(2))][parseInt(id.substring(3))] = game;    
+                            realdata[id.substring(0,2)][id.charAt(2)][id.substring(3)] = game;    
                         } else if ((i+1) == 4){
                             t1 = new Team({
                                 'name': bracketData['00'][3][0]
@@ -138,7 +152,7 @@ $(window).on('load', function(){
 
                             //console.log(t1.name);
                             id = "ff0" + (j/2);
-                            console.log(id + "t1: " + t1.name + " | " + t2.name);
+                            //console.log(id + "t1: " + t1.name + " | " + t2.name);
                             game = new Game(generateGameDict(id,t1,t2));
                             realdata['ff']['0']['0'] = game;  
                             t1 = new Team({
@@ -150,10 +164,10 @@ $(window).on('load', function(){
 
                             //console.log(t1.name);
                             id = "ff02"
-                            console.log(id + "t1: " + t1.name + " | " + t2.name);
+                            //console.log(id + "t1: " + t1.name + " | " + t2.name);
                             game = new Game(generateGameDict(id,t1,t2));
                             realdata['ff'][0][2] = game;
-                            console.log(realdata['ff']);
+                            //console.log(realdata['ff']);
                         }
                     }
                 }
