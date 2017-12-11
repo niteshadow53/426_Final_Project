@@ -1,0 +1,37 @@
+REST API documentation
+
+Login API ==============
+base url: localhost:8888/php/login.php
+
+POST: data={username:"username", password:"password"}
+result: {"error":"", status:""}
+    where <error> is a directly printed error
+    and <status> is a user friendly status message
+
+GET: localhost:8888/php/Brackets.php?user={username to check}
+result: If the username is taken (example results):
+        {"username":"user11","status":"username is taken","taken":1}
+    If not taken:
+        {"status":"username is free","taken":0}
+
+Register API ===========
+base url: localhost:8888/php/register.php
+
+POST: data={username:"username", password:"password"}
+result: {"error":"", status:""}
+    where <error> is a directly printed error
+    and <status> is a user friendly status message
+
+Brackets API ===========
+base url: localhost:8888/php/Brackets.php
+
+GET: localhost:8888/php/Brackets.php?id={id of bracket}
+result: The bracket in your requested JSON form.
+    If there is an error, the following will be returned instead:
+    {"error":"error message"}
+
+POST: data={"name":"bracket_name", "user":"username", "bracket":{bracket in requested form}}
+result: Either:
+    {"success":"1"}
+    OR
+    {"error":"error message"}

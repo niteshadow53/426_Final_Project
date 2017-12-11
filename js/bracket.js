@@ -42,6 +42,7 @@ function generateBracket(data, pickable){
     }
 }
 
+<<<<<<< HEAD
 function generateRegion(coords, fname, pickable){
     $.ajax({
         url: fname,
@@ -69,8 +70,9 @@ function generateRegion(coords, fname, pickable){
         },
         complete: function(){
 
+=======
+>>>>>>> login
         }
-    });
 }
 
 function generateGameDict(gameId, team1 = null, team2 = null){

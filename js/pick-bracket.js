@@ -56,9 +56,12 @@ $(document).ready(function(){
         console.log(leftToPick);            
         if(leftToPick > 0){
             alert("Bracket incomplete");
+<<<<<<< HEAD
         }
             data = JSON.stringify(picks);
             console.log(data);
+=======
+>>>>>>> login
     });
 
     function calculateNextGame(gameId){
