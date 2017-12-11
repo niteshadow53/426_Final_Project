@@ -23,7 +23,44 @@ $(document).ready(function(){
             }
         }
     }
-    generateBracket(bData, true);
+
+    realData = {
+        '00': {},
+        '01': {},
+        '10': {},
+        '11': {},
+        'ff': {}
+    }
+
+    for (key in bData){
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: bData[key],
+            contentType: "text/plain",
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log(jqXHR);
+                console.log("Status: " + textStatus);
+                console.log("Error: " + errorThrown);
+            },
+            success: function (data) {
+                console.log(data);
+                for (var i in data['rounds']){
+                    data['rounds'][i] = data['rounds'][i]['games']
+                }
+                realData[key] = data['rounds'];
+                //console.log(jdata);
+            },
+            complete: function(jqXHR, textStatus){
+                //console.log(jqXHR);
+                //console.log(textStatus);
+            }
+        });
+    
+    }
+
+    console.log(realData);
+    generateBracket(realData, true);
     $('.region').on('click', '.pickable', function(){
         var isThisTeamOne = $(this).hasClass('teamOne');
         var gameid = $($($(this).parent()).parent()[0]).attr('id');
@@ -61,6 +98,19 @@ $(document).ready(function(){
             data = JSON.stringify(picks);
             console.log(data);
 =======
+        } else {
+            postdata = JSON.stringify(picks);
+            console.log(postdata);
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8888/php/Brackets.php',
+                data: postdata,
+                contentType: 'text/plain',
+                success: function(data){
+                    console.log(data);
+                }
+            });
+        }
 >>>>>>> login
     });
 

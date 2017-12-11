@@ -71,8 +71,16 @@ function generateRegion(coords, fname, pickable){
         complete: function(){
 
 =======
+function generateRegion(coords, round, pickable){
+    id = "#region-"+coords;
+    for(var i = 0; i < rounds.length; i++){
+        if(coords == 'ff'){
+            generateRound(id, round, coords, '', pickable);                        
+        } else {
+            generateRound(id, round, coords, i, pickable);
 >>>>>>> login
         }
+    }
 }
 
 function generateGameDict(gameId, team1 = null, team2 = null){
