@@ -108,8 +108,14 @@ function generateNullTeam(){
 function generateRound(id, games, region, round, pickable){
     var firstRound = [];
     var roundId = ""+region+round;
+    var isChamp = false;
     if (region == "ff"){
-        var roundDiv = "<span id='"+roundId+"' class='round'></div>";    
+        if(roundId == 'ff2'){
+            var roundDiv = "<div class='row'><div id='" + roundId + "' class=champion></div></div>";
+            isChamp = true;
+        } else {
+            var roundDiv = "<span id='"+roundId+"' class='round'></div>";                
+        }
     } else {
         var roundDiv = "<div id='"+roundId+"' class='round'></div>";
     }
@@ -132,7 +138,7 @@ function generateRound(id, games, region, round, pickable){
                 var team1 = games[key].team1;
                 var team2 = games[key].team2;
                 bracketGame = new Game(games[key]);
-                addGame(bracketGame, "#"+roundId, region, pickable);
+                addGame(bracketGame, "#"+roundId, region, pickable, isChamp);
                 firstRound.push(bracketGame);
             }
         }
@@ -200,14 +206,19 @@ function generateNextRound(games, id, round, region){
     return nextRound;
 }
 
-function addGame(game, id, region, pickable, prevOne = null, prevTwo = null){
-    if (region == "ff"){
-        $(id).append(generateGame(game, region, pickable));        
+function addGame(game, id, region, pickable, isChamp, prevOne = null, prevTwo = null){
+    if(isChamp){
+        $(id).append(generateChamp(game, region, pickable));                
     } else {
-        $(id).append(generateGame(game, region, pickable) + "<br>");
+        if (region == "ff"){
+            $(id).append(generateGame(game, region, pickable));        
+        } else {
+            $(id).append(generateGame(game, region, pickable) + "<br>");
+        }
+        var width = Math.min($("#bracket").width() / 8 - 20, 160);
+        $("#"+game.id).width(width);    
     }
-    var width = Math.min($("#bracket").width() / 8 - 20, 160);
-    $("#"+game.id).width(width);
+
     /*$("#"+game.id + " tr.teamOne").css({
         'background-color': game.team1.bgcolor,
         'color': game.team1.textcolor
@@ -263,6 +274,32 @@ function generateGame(game, region, pickable){
             html += "<tr class='teamTwo'><td class='team'>" + game.team2.name + "</td><td class='score right'>" + game.score.team2Score + "</td></tr>";        
         }
     }
+    html += "</table>";
+    return html;
+}
+
+function generateChamp(game, region, pickable){
+    html = "<table class='game' id='"+game.id + "'>";
+    html += "<tr class='teamOne pickable'><td class='team'>National Champion</td></tr>";    
+    html += "<tr class='teamTwo pickable'><td class='team'>" + game.team1.name + "</td></tr>"; 
+    /*if (region == "01" || region == "11"){
+        if(pickable){
+            html += "<tr class='teamOne pickable'><td class='score left'>" + game.score.team1Score + "</td><td class='team'>National Champion</td></tr>";
+            html += "<tr class='teamTwo pickable'><td class='score left'>" + game.score.team2Score + "</td><td class='team'>" + game.team1.name + "</td></tr>";    
+        } else {
+            html += "<tr class='teamOne'><td class='score left'>" + game.score.team1Score + "</td><td class='team'>" + game.team1.name + "</td></tr>";
+            html += "<tr class='teamTwo'><td class='score left'>" + game.score.team2Score + "</td><td class='team'>" + game.team2.name + "</td></tr>";    
+        }
+    } else {
+        if (pickable){
+            html += "<tr class='teamOne pickable'><td class='team'>" + game.team1.name + "</td><td class='score right'>" + game.score.team1Score + "</td></tr>";
+            html += "<tr class='teamTwo pickable'><td class='team'>" + game.team2.name + "</td><td class='score right'>" + game.score.team2Score + "</td></tr>";    
+
+        } else {
+            html += "<tr class='teamOne'><td class='team'>" + game.team1.name + "</td><td class='score right'>" + game.score.team1Score + "</td></tr>";
+            html += "<tr class='teamTwo'><td class='team'>" + game.team2.name + "</td><td class='score right'>" + game.score.team2Score + "</td></tr>";        
+        }
+    }*/
     html += "</table>";
     return html;
 }

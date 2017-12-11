@@ -54,12 +54,4 @@ result: Either:
 url: localhost:8888/php/Brackets.php/checkIfBracketExists
 POST: data={"username":"username", "bracket_name":"bracket_name"}
 purpose: To check if the requested bracket name already exists for that user
-result: Either:
-    {"status":"Bracket already exists","taken":1}
-    OR
-    {"status":"Bracket name is available","taken":0}
-
-url: localhost:8888/php/Brackets.php/getBracketsForUser
-POST: data={"username":"username"}
-purpose: to get a bracket list for the selected user
-result: {"7":"abracket","1":"bestbracket","4":"bestbracket2","8":"bracket (reprise)","5":"bracketology"}
+result: 

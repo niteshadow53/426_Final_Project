@@ -32,6 +32,8 @@ $(document).ready(function(){
 
     var leftToPick = 63;
 
+    var ffrnd = 1;
+
     for (key in bData){
         var limit = (key == '00' || key == '01' || key == '10' || key == '11') ? 4 : 2;
         for(var i = 0; i < limit; i++){
@@ -135,14 +137,15 @@ $(document).ready(function(){
     });
 
     function calculateNextGame(gameId){
-        if(gameId == 'ff10'){
+        if(gameId == 'ff20'){
             return null;
         }
         var gameNum = parseInt(gameId.substring(3));
         var isTeamOne = (gameNum % 4 == 0) ? true : false;
         var nextGameNum = (isTeamOne) ? gameNum : gameNum - 2;
         nextGameNum = 2*(nextGameNum / 4);
-        var nextGamePrefix = ($("#"+gameId).attr('id').substring(0,2) == 'ff') ? 'ff' : $($("#"+gameId).parent()[0]).attr('id');
+        var other = $($("#"+gameId).parent()[0]).attr('id');
+        var nextGamePrefix = ($("#"+gameId).attr('id').substring(0,2) == 'ff') ? 'ff' : other;
         nextGameRegion = nextGamePrefix.substring(0,2);
         nextGameRound = parseInt(nextGamePrefix.charAt(2)) + 1;
         if(nextGameRound == 4){
@@ -151,11 +154,17 @@ $(document).ready(function(){
             nextGamePrefix = 'ff0';
             isTeamOne = (fNum == 0) ? true : false;
         } else if (nextGameRegion == 'ff'){
-            nextGameId = 'ff10';
+            console.log(nextGameRound);
+
+            nextGameId = 'ff' + ffrnd + '0';
+            if(nextGameId == 'ff20'){
+                isTeamOne = false;
+            }
+            ffrnd++;
         } else {
             nextGamePrefix = nextGamePrefix.substring(0,2) + (parseInt(nextGamePrefix.charAt(2)) + 1).toString();            
         }
-        var nextGameId = (nextGameId == 'ff10') ? nextGameId : nextGamePrefix + nextGameNum;
+        var nextGameId = (nextGameId != 'ff10' && nextGameId != 'ff20') ? nextGamePrefix + nextGameNum : nextGameId;
         return [nextGameId, isTeamOne];
     }
 

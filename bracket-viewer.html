@@ -12,11 +12,14 @@
             <span class="nav-item"><a href="#">Home</a></span>
             <span class="nav-item"><a href="dashboard.html">Official Bracket</a></span>
             <span class="nav-item"><a href="bracket-picker.html">Create A Bracket</a></span>
-            <span class="nav-item"><a href="bracket-viewer.html">My Bracket</a></span>
+            <span class="nav-item"><a href="bracket-lsit.html">My Brackets</a></span>
             <span class="nav-item"><a href="#">My Profile</a></span>
         </div>
+        <div class='alert' id='success-alert' hidden='true'>
+            <span class='msg'><p>Picks Successfully Updated</p></span>
+        </div>
         <div id="bracket">
-            <h1>Official Bracket</h1>
+            <h1>Bracket Viewer</h1>
             <div class='row'>
                 <div class='region left' id="region-00"></div>
                 <div class='region right'  id="region-01"></div>        
@@ -29,5 +32,6 @@
                 <div class='region right'  id="region-11"></div>
             </div>
         </div>
+        <button id="submit-picks">Update Your Picks</button>        
     </body>
 </html>

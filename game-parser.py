@@ -2,7 +2,7 @@ import json
 
 for region in range(0,1):
     rounds = []
-    for rnd in range(0,2):
+    for rnd in range(0,3):
         fname = 'ff' + str(rnd) + '.txt'
         print(fname)
         with open(fname) as f:

@@ -16,6 +16,38 @@ $(document).ready(function(){
         $("#options").slideDown();
         $("#back").hide();
     });
+
+    $("#login-button").click(function(){
+        $.ajax({
+            type: 'post',
+            url: 'http://localhost:8888/426_final_project/php/login.php/',
+            data: {
+                'username': $("#uname").val(),
+                'password': $("#upass").val()
+            },
+            success: function(data){
+                jdata = JSON.parse(data);
+                console.log(jdata);
+                if(jdata['error'] == ''){
+                    window.location = 'dashboard.html';
+                }
+            }
+        });
+    });
+
+    $("#register-button").click(function(){
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8888/426_final_project/php/register.php',
+            data: {
+                'username': $("#new-username").val(),
+                'password': $("#new-password").val()
+            },
+            success: function(data){
+                console.log(data);
+            }
+        });
+    });
 })
 
 // Displays an error inside a given div

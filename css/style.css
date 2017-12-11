@@ -172,7 +172,7 @@ td.score.left{
 .region.center{
     width: 50%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-around;
     margin-left: 50%;
     margin-right: 50%; 
@@ -224,4 +224,66 @@ td.score.left{
 span.round {
     display: flex;
     flex-direction: row;
+}
+
+#bracket-table{
+    padding-left: 2em;
+    padding-right: 2em;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.bracket-entry{
+    height: 1.5em;
+}
+
+.bracket-entry.alt{
+    background-color: #afafaf;
+}
+
+.bracket-entry a{
+    color: black;
+    
+}
+
+.bracket-entry a:visited{
+    text-decoration: none;
+}
+
+#create-bracket-name{
+    text-align: center;
+}
+
+#bracket-name{
+    font-size: 2em;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    border: none;
+    border-bottom-width: medium;
+    border-bottom-style: none;
+    border-bottom-color: currentcolor;
+    border-bottom: 2px solid #13294b;
+    color: #13294b;
+}
+
+#create-bracket{
+    width: 75%;
+    text-align: center;
+    margin: 0 auto;
+        margin-top: 0px;
+    margin-top: 0.5em;
+    background-color: #13294b;
+    cursor: pointer;
+}
+
+#submit-picks{
+    font-size: 3em;
+    width: 44%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #13294b;
+    cursor: pointer;
 }

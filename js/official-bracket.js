@@ -61,8 +61,14 @@ $(window).on('load', function(){
     
     // console.log(realdata);
     
-
+    var picks ={
+        'bracket': {},
+        'user': {},
+        'bracketName': {}
+    };
+    var leftToPick = 0;
     $.ajax({
+        async: false,
         type: "GET",
         url: 'http://localhost:8888/426_final_project/php/Brackets.php?id=' + bid,
         contentType: "text/plain",
@@ -74,6 +80,7 @@ $(window).on('load', function(){
         success: function (data) {
             //console.log(data);
             jdata = JSON.parse(data);
+            //console.log(jdata);
             reg00 = jdata['bracket']['00'];
             reg01 = jdata['bracket']['01'];
             reg10 = jdata['bracket']['10'];
@@ -95,6 +102,7 @@ $(window).on('load', function(){
                         if (bracketData[key][i][j] === undefined){
                             bracketData[key][i][j] = ' ';
                         }
+                            picks['bracket'][key + i + j] = bracketData[key][i][j];
                     }
                 }
             }
@@ -176,15 +184,142 @@ $(window).on('load', function(){
                     }
                 }
             }
-
             //console.log(realdata);
-            generateBracket(realdata, false);
+            generateBracket(realdata, true);
         },
         complete: function(jqXHR, textStatus){
             //console.log(jqXHR);
             //console.log(textStatus);
         }
     });
+
+    $('.region').on('click', '.pickable', function(){
+        var isThisTeamOne = $(this).hasClass('teamOne');
+        var gameid = $($($(this).parent()).parent()[0]).attr('id');
+        var nextGame = calculateNextGame(gameid);
+        winner = $(this).find('.team')[0].textContent;
+        if (nextGame == null){
+                picks['bracket']['ff10'] = winner;
+        } else {
+            var nextGameId = nextGame[0];
+            var isTeamOne = nextGame[1];    
+            if(isTeamOne){
+                currentWinner = $($("#"+nextGameId).find('.teamOne')).find('.team')[0].textContent;
+                removeEntries(currentWinner, winner, gameid, isThisTeamOne);
+                $($("#"+nextGameId).find('.teamOne')).find('.team')[0].textContent = winner;
+            } else {
+                currentWinner = $($("#"+nextGameId).find('.teamTwo')).find('.team')[0].textContent;
+                removeEntries(currentWinner, winner, gameid, isThisTeamOne);    
+                $($("#"+nextGameId).find('.teamTwo')).find('.team')[0].textContent = winner;            
+            }
+            key = gameid.substring(0,2) + gameid.charAt(2) + gameid.substring(3);
+            picks['bracket'][key] = winner;
+        }
+        if(leftToPick > 0){
+            leftToPick--;
+        }
+        console.log(leftToPick);
+    });
+
+    $("#submit-picks").click(function(){
+        console.log(leftToPick);
+        var bracket_name;
+        $.ajax({
+            async: false,
+            type: 'POST',
+            url: 'http://localhost:8888/426_final_project/php/Brackets.php/getBracketsForUser',
+            data: {
+                'username': 'user11'
+            },
+            success: function(data){
+                brackets = JSON.parse(data);
+                bracket_name = brackets[bid];
+                console.log(bracket_name);
+                alert("Picks Successfully Saved");
+            }
+        });
+
+
+        picks['name'] = $("#bracket-name").val();
+        postdata = JSON.stringify(picks);
+
+        console.log(postdata);
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8888/426_final_project/php/Brackets.php/',
+            data: {
+                'bracket': JSON.stringify(picks['bracket']),
+                'name': bracket_name,
+                'user': 'user11'
+            },
+            success: function(data){
+                console.log(data);
+            },
+            error: function(jqXHR, exception){
+                console.log(jqXHR);
+                console.log(exception);
+            }
+        });
+    });
+
+    function calculateNextGame(gameId){
+        if(gameId == 'ff10'){
+            return null;
+        }
+        var gameNum = parseInt(gameId.substring(3));
+        var isTeamOne = (gameNum % 4 == 0) ? true : false;
+        var nextGameNum = (isTeamOne) ? gameNum : gameNum - 2;
+        nextGameNum = 2*(nextGameNum / 4);
+        var nextGamePrefix = ($("#"+gameId).attr('id').substring(0,2) == 'ff') ? 'ff' : $($("#"+gameId).parent()[0]).attr('id');
+        nextGameRegion = nextGamePrefix.substring(0,2);
+        nextGameRound = parseInt(nextGamePrefix.charAt(2)) + 1;
+        if(nextGameRound == 4){
+            fNum = parseInt(gameId.charAt(0));
+            nextGameNum =  (parseInt(nextGamePrefix.charAt(1)) * 2).toString();
+            nextGamePrefix = 'ff0';
+            isTeamOne = (fNum == 0) ? true : false;
+        } else if (nextGameRegion == 'ff'){
+            nextGameId = 'ff10';
+        } else {
+            nextGamePrefix = nextGamePrefix.substring(0,2) + (parseInt(nextGamePrefix.charAt(2)) + 1).toString();            
+        }
+        var nextGameId = (nextGameId == 'ff10') ? nextGameId : nextGamePrefix + nextGameNum;
+        return [nextGameId, isTeamOne];
+    }
+
+    function removeEntries(team, newTeam, startingPoint, isTeamOne){
+        pageTeam = team;
+        while(pageTeam != newTeam && pageTeam != ""){
+            var key = startingPoint.substring(0,2) + startingPoint.charAt(2) + startingPoint.substring(3);
+            picks['bracket'][key] = null;
+            if(leftToPick < 63){
+                leftToPick++;                
+            }
+            nextGame = calculateNextGame(startingPoint);
+            startingPoint = nextGame[0];
+            console.log(startingPoint);
+            isTeamOne = nextGame[1];
+            oldPageTeam = pageTeam;
+            if(isTeamOne){
+                pageTeam = $($("#"+startingPoint).find('.teamOne')).find('.team')[0].textContent                
+            } else {
+                pageTeam = $($("#"+startingPoint).find('.teamTwo')).find('.team')[0].textContent   
+            }
+            if(isTeamOne){
+                $($("#"+startingPoint).find('.teamOne')).find('.team')[0].textContent = '';
+            } else {
+                $($("#"+startingPoint).find('.teamTwo')).find('.team')[0].textContent = '';            
+            }
+            key = startingPoint.substring(0,2) + startingPoint.charAt(2) + startingPoint.substring(3);
+            if(pageTeam != picks['bracket'][key]){
+                return;
+            }
+        }
+        
+    }
+
+
+
 
     /*var bData = {
         '00': '00.json',
