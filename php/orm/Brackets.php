@@ -266,6 +266,8 @@ function saveBracketDataFromPOST($data, $bracket_name, $username){
         }
         $team_id = $team_id_response['team_id'];
 
+
+
         $region = substr($property, 0, 2);
         $round = substr($property, 2, 1);
         $game_num = substr($property, 3);
@@ -291,8 +293,6 @@ function saveBracketDataFromPOST($data, $bracket_name, $username){
         $qry .= "(?, ?, ?, ?, ?)";
         $stmt = $mysqli->prepare($qry);
         $stmt->bind_param("iisii", $game_num, $round, $region, $team_id, $bracket_id);
-
-        print_r($team_id . "\n");
 
         // execute statement
         if (!$stmt->execute()){
@@ -619,6 +619,43 @@ function getBracketsForUser($username){
 
     return (object)$response;
 
+}
+
+function getUsernameFromBracketID($bracket_id){
+    // return bracket names and ids
+    $response = array();
+    $mysqli = getMysqliObject();
+
+    // Check for and return connection errors
+    if ($mysqli->connect_errno){
+        $response["error"] = "Failed to connect";
+        $response["error"] .= $mysqli->error;
+        return $response;
+    }
+
+    $qry = "SELECT username, brackets.name, brackets.bracket_id FROM brackets, users ";
+    $qry .= "WHERE brackets.user = users.user_id AND bracket_id=?";
+    $stmt = $mysqli->prepare($qry);
+    $stmt->bind_param("i", $bracket_id);
+
+    // execute statement
+    if (!$stmt->execute()){
+        $response["error"] = $mysqli->error;
+        $response["error"] .= "statement failed to execute";
+        // echo json_encode($response);
+        return $response;
+    }
+
+    // Parse response
+    $result = $stmt->get_result();
+    while($row = $result->fetch_assoc()){
+        $response['username'] = $row['username'];
+    }
+    if(($response['username'] == "")){
+        $response["error"] = "bracket id ".$bracket_id." does not exist";
+        return $response;
+    }
+    return $response;
 }
 
 

@@ -34,7 +34,7 @@ function login(){
     }
 
     // set session variable "auth" to true and "user" to username
-    $_SESSION["user"] = $username;
+    $_SESSION["username"] = $username;
     $result["status"] = "Successfully authenticated as: ".$_SESSION["user"];
     echo json_encode($result);
 }
@@ -107,6 +107,7 @@ else{ // POST
     // implement post logic here
 
     login();
+    // echo $_SESSION['user'];
 
 }
 
