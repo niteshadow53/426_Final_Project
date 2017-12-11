@@ -90,28 +90,30 @@ $(document).ready(function(){
     });
 
     $("#submit-picks").click(function(){
-        console.log(leftToPick);            
-        if(leftToPick > 0){
+        console.log(leftToPick);
+        picks['name'] = $("#bracket-name").val();
+        if(leftToPick > 66){
             alert("Bracket incomplete");
-<<<<<<< HEAD
-        }
-            data = JSON.stringify(picks);
-            console.log(data);
-=======
         } else {
             postdata = JSON.stringify(picks);
             console.log(postdata);
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8888/php/Brackets.php',
-                data: postdata,
-                contentType: 'text/plain',
+                url: 'http://localhost:8888//426_final_project/php/Brackets.php',
+                data: {
+                    'bracket': JSON.stringify(picks['bracket']),
+                    'name': picks['name'],
+                    'user': 'user11'
+                },
                 success: function(data){
                     console.log(data);
+                },
+                error: function(jqXHR, exception){
+                    console.log(jqXHR);
+                    console.log(exception);
                 }
             });
         }
->>>>>>> login
     });
 
     function calculateNextGame(gameId){

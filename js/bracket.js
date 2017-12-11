@@ -42,46 +42,31 @@ function generateBracket(data, pickable){
     }
 }
 
-<<<<<<< HEAD
-function generateRegion(coords, fname, pickable){
-    $.ajax({
-        url: fname,
-        beforeSend: function(xhr){
-            if (xhr.overrideMimeType)
-            {
-                xhr.overrideMimeType("application/json");
-            }
-            },
-        dataType: 'json',
-        success: function(data){
-            if(coords == 'ff'){
-                console.log('hi');
-            }
-            rounds = data['rounds'];
-            id = "#region-"+coords;
-            for(var i = 0; i < rounds.length; i++){
-                if(coords == 'ff'){
-                    generateRound(id, rounds[i]['games'], coords, i, pickable);
-                    $("#ff02").before($("#ff10"));
-                } else {
-                    generateRound(id, rounds[i]['games'], coords, i, pickable);
-                }
-            }
-        },
-        complete: function(){
-
-=======
-function generateRegion(coords, round, pickable){
+function generateRegion(coords, rounds, pickable){
     id = "#region-"+coords;
-    for(var i = 0; i < rounds.length; i++){
-        if(coords == 'ff'){
-            generateRound(id, round, coords, '', pickable);                        
-        } else {
-            generateRound(id, round, coords, i, pickable);
->>>>>>> login
+    if (rounds.length === undefined){
+        for(var i in rounds){
+            if(coords == 'ff' && i < 2){
+                generateRound(id, rounds[i], coords, i, pickable);
+                $("#ff02").before($("#ff10"));
+            } else if (coords == 'ff' && i >= 2){
+                console.log(rounds[i]);
+            } else {
+                generateRound(id, rounds[i], coords, i, pickable);
+            }
+        }
+    } else {
+        for(var i = 0; i < rounds.length; i++){
+            if(coords == 'ff'){
+                generateRound(id, rounds[i], coords, i, pickable);
+                $("#ff02").before($("#ff10"));
+            } else {
+                generateRound(id, rounds[i], coords, i, pickable);
+            }
         }
     }
 }
+
 
 function generateGameDict(gameId, team1 = null, team2 = null){
     var re = gameId.substring(0, 2);
@@ -140,13 +125,24 @@ function generateRound(id, games, region, round, pickable){
         roundLabel = generateRoundLabel(4);
         $("#"+roundId).append(roundLabel);    
     }
-    for (var game of games){
+
+    for (var key in games){
+        if(games.hasOwnProperty(key)){
+            var team1 = games[key].team1;
+            var team2 = games[key].team2;
+            bracketGame = new Game(games[key]);
+            addGame(bracketGame, "#"+roundId, region, pickable);
+            firstRound.push(bracketGame);       
+        }
+    }
+
+    /*for (var game of games){
         var team1 = game.team1;
         var team2 = game.team2;
         bracketGame = new Game(game);
         addGame(bracketGame, "#"+roundId, region, pickable);
         firstRound.push(bracketGame);
-    }
+    }*/
     return firstRound;
 }
 

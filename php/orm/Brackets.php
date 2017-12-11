@@ -223,12 +223,13 @@ function saveBracketDataFromPOST($data, $bracket_name, $username){
     foreach ($data as $property => $value){
         // get winner's ID
         $team_id_response = getIDOfTeam($value);
+        //print_r($value);
+        //print_r($team_id_response);
+        error_log("ERROR: " . $output);
         if(array_key_exists($team_id_response, "error")){
             return $team_id_response;
         }
         $team_id = $team_id_response['team_id'];
-
-
 
         $region = substr($property, 0, 2);
         $round = substr($property, 2, 1);
@@ -255,6 +256,8 @@ function saveBracketDataFromPOST($data, $bracket_name, $username){
         $qry .= "(?, ?, ?, ?, ?)";
         $stmt = $mysqli->prepare($qry);
         $stmt->bind_param("iisii", $game_num, $round, $region, $team_id, $bracket_id);
+
+        print_r($team_id . "\n");
 
         // execute statement
         if (!$stmt->execute()){
