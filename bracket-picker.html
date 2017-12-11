@@ -10,14 +10,17 @@
     <body>
         <div class="navbar">
             <span class="nav-item"><a href="#">Home</a></span>
-            <span class="nav-item"><a href="#">Official Bracket</a></span>
-            <span class="nav-item"><a href="#">My Groups</a></span>
+            <span class="nav-item"><a href="dashboard.html">Official Bracket</a></span>
+            <span class="nav-item"><a href="bracket-picker.html">Create A Bracket</a></span>
             <span class="nav-item"><a href="#">My Bracket</a></span>
             <span class="nav-item"><a href="#">My Profile</a></span>
         </div>
-        <div id="bracket">
-            <h1>Pick Your Bracket</h1>
-            <input type="text" placeholder='Bracket Name'>
+        <h1>Pick Your Bracket</h1>
+        <div id="create-bracket-name">
+            <input type="text" placeholder='Bracket Name' id="bracket-name">
+            <button id='create-bracket'>Create Bracket</button>    
+        </div>
+        <div id="bracket" hidden='true'>                
             <div class='row'>
                 <div class='region left' id="region-00"></div>
                 <div class='region right'  id="region-01"></div>        
