@@ -10,7 +10,7 @@ $pathinfo = explode("/", $pathinfo);
 
 // print_r ($pathinfo);
 // print_r $_GET;
-// print_r ($_POST['bracket']);
+// print_r ($_POST);
 
 // Check if GET or POST
 if ($_SERVER['REQUEST_METHOD'] === 'GET'){
@@ -27,6 +27,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'){
 else{ // POST
     // implement post logic here
 
+    if(array_key_exists("1", $pathinfo) && $pathinfo[1] == "createBracket"){
+        // echo "create bracket with name: \n";
+        $bracket_name = $_POST['bracket_name'];
+        $username = $_POST['username'];
+        // echo $name."\n";
+        // echo "username: ".$username;
+
+        echo json_encode(createBracket($username, $bracket_name));
+
+        return;
+    }
     $json = json_decode($_POST['bracket']);
     echo json_encode(saveBracketDataFromPOST($json, $_POST['name'], $_POST['user']));
 

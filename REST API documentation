@@ -4,11 +4,13 @@ Login API ==============
 base url: localhost:8888/php/login.php
 
 POST: data={username:"username", password:"password"}
+purpose: To authenticate a user that is trying to log in
 result: {"error":"", status:""}
     where <error> is a directly printed error
     and <status> is a user friendly status message
 
 GET: localhost:8888/php/Brackets.php?user={username to check}
+purpose: To check if a username is taken
 result: If the username is taken (example results):
         {"username":"user11","status":"username is taken","taken":1}
     If not taken:
@@ -18,6 +20,7 @@ Register API ===========
 base url: localhost:8888/php/register.php
 
 POST: data={username:"username", password:"password"}
+purpose: To register a username/password combination
 result: {"error":"", status:""}
     where <error> is a directly printed error
     and <status> is a user friendly status message
@@ -26,12 +29,22 @@ Brackets API ===========
 base url: localhost:8888/php/Brackets.php
 
 GET: localhost:8888/php/Brackets.php?id={id of bracket}
+purpose: To retrieve a requested bracket
 result: The bracket in your requested JSON form.
     If there is an error, the following will be returned instead:
     {"error":"error message"}
 
 POST: data={"name":"bracket_name", "user":"username", "bracket":{bracket in requested form}}
+purpose: To update a selected bracket with new picks
 result: Either:
     {"success":"1"}
     OR
     {"error":"error message"}
+
+POST: data={"bracket_name":"Bracketology", "username":"user11"}
+purpose: To create a named bracket for the requested user
+result: Either:
+    {"status":"Bracket successfully added","bracket_id":6}
+    OR
+    {"error":"Bracket already exists"}
+    NOTE: the bracket id is returned with the created bracket for your use
