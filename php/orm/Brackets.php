@@ -229,6 +229,7 @@ function saveBracketDataFromPOST($data, $bracket_name, $username){
         error_log("ERROR: " . $output);
         if(array_key_exists($team_id_response, "error")){
 =======
+        if(array_key_exists("error", $team_id_response)){
 >>>>>>> login
             return $team_id_response;
         }

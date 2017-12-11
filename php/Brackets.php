@@ -28,7 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'){
 }
 else{ // POST
     // implement post logic here
+<<<<<<< HEAD
     //echo(print_r($_POST, true));
+=======
 
     if (array_key_exists("1", $pathinfo) && $pathinfo[1] == "checkIfBracketExists"){
         $username = $_POST['username'];
@@ -52,6 +54,7 @@ else{ // POST
 
         return;
     }
+>>>>>>> login
     $json = json_decode($_POST['bracket']);
     error_log($json);
     echo json_encode(saveBracketDataFromPOST($json, $_POST['name'], $_POST['user']));
