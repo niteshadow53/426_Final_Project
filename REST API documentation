@@ -34,6 +34,7 @@ result: The bracket in your requested JSON form.
     If there is an error, the following will be returned instead:
     {"error":"error message"}
 
+url: localhost:8888/php/Brackets.php/updateGames
 POST: data={"name":"bracket_name", "user":"username", "bracket":{bracket in requested form}}
 purpose: To update a selected bracket with new picks
 result: Either:
@@ -41,6 +42,7 @@ result: Either:
     OR
     {"error":"error message"}
 
+url: localhost:8888/php/Brackets.php/createBracket
 POST: data={"bracket_name":"Bracketology", "username":"user11"}
 purpose: To create a named bracket for the requested user
 result: Either:
@@ -48,3 +50,8 @@ result: Either:
     OR
     {"error":"Bracket already exists"}
     NOTE: the bracket id is returned with the created bracket for your use
+
+url: localhost:8888/php/Brackets.php/checkIfBracketExists
+POST: data={"username":"username", "bracket_name":"bracket_name"}
+purpose: To check if the requested bracket name already exists for that user
+result: 

@@ -450,6 +450,31 @@ function createBracket($username, $bracket_name){
     return array("status"=>"Bracket successfully added", "bracket_id"=>$bracket_id);
 }
 
+function checkIfBracketExists($username, $bracket_name){
+    // get user's ID
+    $user_id_response = getIDOfUser($username);
+    if(array_key_exists("error", $user_id_response)){
+        return $user_id_response;
+    }
+    $user_id = $user_id_response['user_id'];
+
+    // get bracket's ID (check to see if it already exists)
+    $bracket_id_response = getIDOfBracket($bracket_name, $user_id);
+    if(array_key_exists("error", $bracket_id_response)){
+        return $bracket_id_response;
+    }
+    $bracket_id = $bracket_id_response['bracket_id'];
+
+    // print "userid: ".$user_id."\n";
+    // print "bracket_id: ".$bracket_id;
+
+    if(!($bracket_id == null)){
+        return array("status"=>"Bracket already exists", "taken"=>1);
+    }
+
+    return array("status"=>"Bracket name is available", "taken"=>0);
+}
+
 function updateGames($input){
     $response = array();
     $mysqli = getMysqliObject();
@@ -541,4 +566,6 @@ function updateGames($input){
 
 // createBracket($user11, "best bracket ever!");
 // createBracket($user11, "bestbracket");
+
+// print_r (checkIfBracketExists("user11", "bestbracket"));
 ?>
