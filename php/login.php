@@ -80,6 +80,9 @@ function checkIfUsernameIsTaken($username){
     return $response;
 }
 
+function getAuthenticatedUser(){
+    return array("username"=>$_SESSION['username']);
+}
 
 // print ($_SERVER['REQUEST_METHOD']);
 
@@ -94,14 +97,18 @@ $pathinfo = explode("/", $pathinfo);
 // Check if GET or POST
 if ($_SERVER['REQUEST_METHOD'] === 'GET'){
     // echo "This is a get method";
-    echo json_encode(checkIfUsernameIsTaken($_GET['user']));
 
-    if(array_key_exists("1", $pathinfo)){
+
+    if(array_key_exists("1", $pathinfo) && $pathinfo[1] == "getAuthenticatedUser"){
         // implement logic here
+        echo json_encode(getAuthenticatedUser());
+        return;
     }
-    else{
-        // implement logic here
-    }
+
+    echo json_encode(checkIfUsernameIsTaken($_GET['user']));
+    // else{
+    //     // implement logic here
+    // }
 }
 else{ // POST
     // implement post logic here
