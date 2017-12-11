@@ -266,8 +266,6 @@ function saveBracketDataFromPOST($data, $bracket_name, $username){
         }
         $team_id = $team_id_response['team_id'];
 
-
-
         $region = substr($property, 0, 2);
         $round = substr($property, 2, 1);
         $game_num = substr($property, 3);
@@ -293,6 +291,8 @@ function saveBracketDataFromPOST($data, $bracket_name, $username){
         $qry .= "(?, ?, ?, ?, ?)";
         $stmt = $mysqli->prepare($qry);
         $stmt->bind_param("iisii", $game_num, $round, $region, $team_id, $bracket_id);
+
+        print_r($team_id . "\n");
 
         // execute statement
         if (!$stmt->execute()){

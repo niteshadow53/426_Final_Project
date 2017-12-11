@@ -4,6 +4,8 @@ require_once "orm/Brackets.php";
 
 // print ($_SERVER['REQUEST_METHOD']);
 
+error_log($_SERVER['REQUEST_METHOD']);
+
 $pathinfo = $_SERVER["PATH_INFO"];
 
 $pathinfo = explode("/", $pathinfo);
@@ -55,6 +57,7 @@ else{ // POST
         return;
     }
     $json = json_decode($_POST['bracket']);
+    error_log($json);
     echo json_encode(saveBracketDataFromPOST($json, $_POST['name'], $_POST['user']));
 
 }
