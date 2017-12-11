@@ -35,7 +35,7 @@ function login(){
 
     // set session variable "auth" to true and "user" to username
     $_SESSION["username"] = $username;
-    $result["status"] = "Successfully authenticated as: ".$_SESSION["user"];
+    $result["status"] = "Successfully authenticated as: ".$_SESSION["username"];
     echo json_encode($result);
 }
 
