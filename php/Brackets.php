@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'){
         // Add an exception for the "official bracket" pick
         if(($username != $_SESSION['username'] || $username == null) && $_GET['id'] != 0){
             echo "Not authenticated!";
+            return;
         }
         echo json_encode(getBracketData($_GET['id']));
     }
@@ -35,6 +36,7 @@ else{ // POST
     // Check to make sure user is authenticated
     if($_POST['username'] != $_SESSION['username'] || $_POST['username'] == null){
         echo "Not authenticated!";
+        return;
     }
     // echo "username: ".$_POST['username'];
     // echo "authorized as: ".$_SESSION['username'];
