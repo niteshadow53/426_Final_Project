@@ -450,6 +450,70 @@ function createBracket($username, $bracket_name){
     return array("status"=>"Bracket successfully added", "bracket_id"=>$bracket_id);
 }
 
+function updateGames($input){
+    $response = array();
+    $mysqli = getMysqliObject();
+
+    // Check for and return connection errors
+    if ($mysqli->connect_errno){
+        $response["error"] = "Failed to connect";
+        $response["error"] .= $mysqli->error;
+        return $response;
+    }
+
+    // parse for team1 name
+    // TODO
+    $team1_name = "";
+
+    // parse for team2 name
+    // TODO
+    $team2_name = "";
+
+    // get team1 id
+    $team1_id_response = getIDOfTeam($team1_name);
+    if(array_key_exists("error", $team1_id_response)){
+        return $team1_id_response;
+    }
+    $team1_id = $team1_id_response['team_id'];
+    // get team2 id
+    $team2_id_response = getIDOfTeam($team2_name);
+    if(array_key_exists("error", $team2_id_response)){
+        return $team2_id_response;
+    }
+    $team2_id = $team2_id_response['team_id'];
+
+    // TODO Should I have the lower id always be team1?
+
+    // for each row in input...
+        $round = ""; // TODO
+        $region = ""; // TODO
+        $team1score = ""; // TODO
+        $team2score = ""; // TODO
+        $status = ""; // TODO
+        $winner = ""; // TODO (the actual string name)
+        $winner_id = 0;
+        if($winner == $team1_name){
+            $winner_id = $team1_id;
+        }
+        else{
+            $winner_id = $team2_id;
+        }
+
+        $qry = "INSERT INTO games (round, region, team1, team2, team1score, team2score, status, winner) ";
+        $qry .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $mysqli->prepare($qry);
+        $stmt->bind_param("isiiiiii", $round, $region, $team1_id, $team2_id, $team1_score, $team2_score, $status, $winner_id);
+
+        // execute statement
+        if (!$stmt->execute()){
+            $response["error"] = $mysqli->error;
+            $response["error"] .= "statement failed to execute";
+            // echo json_encode($response);
+            return $response;
+        }
+
+}
+
 
 // TESTING ====
 // print json_encode(getPicksForBracketIDRoundAndRegion(1, 0, "00"));

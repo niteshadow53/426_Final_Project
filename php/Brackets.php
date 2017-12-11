@@ -27,6 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'){
 else{ // POST
     // implement post logic here
 
+    if(array_key_exists("1", $pathinfo) && $pathinfo[1] == "updateGames"){
+        echo "updating games";
+        // TODO finish implementing
+        return;
+    }
     if(array_key_exists("1", $pathinfo) && $pathinfo[1] == "createBracket"){
         // echo "create bracket with name: \n";
         $bracket_name = $_POST['bracket_name'];
